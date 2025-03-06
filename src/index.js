@@ -1,11 +1,9 @@
-const express = require('express');
-const app = express();
-const port = 3000;
+import { initMongoDb } from '../src/dB/initMongoDB.js';
+import { startServer } from './server.js';
 
-app.get('/', (req, res) => {
-  res.send('Сервер працює!');
-});
+const bootstrap = async () => {
+  await initMongoDb();
+  startServer();
+};
 
-app.listen(port, () => {
-  console.log(`Сервер запущено на порту ${port}`);
-});
+bootstrap();

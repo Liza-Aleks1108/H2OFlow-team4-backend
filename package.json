@@ -2,6 +2,7 @@
   "name": "nodejs-project",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "lint": "eslint src/**/*.js",
     "start": "node ./src/index.js",
@@ -24,9 +25,13 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "cloudinary": "^2.5.1",
     "cookie-parser": "^1.4.7",
+    "cookieparser": "^0.1.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "expres": "^0.0.5",
     "express": "^4.21.2",
     "google-auth-library": "^9.15.1",
     "handlebars": "^4.7.8",
@@ -34,9 +39,11 @@
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "modern-normalize": "^3.0.1",
+    "mongodb": "^6.14.2",
     "mongoose": "^8.12.1",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.10.0",
+    "pino": "^9.6.0",
     "pino-http": "^10.4.0",
     "swagger-ui-express": "^5.0.1"
   }
