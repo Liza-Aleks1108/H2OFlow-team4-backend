@@ -4,7 +4,7 @@ import water from './water.js';
 
 const router = Router();
 
-router.use('/', auth);
+router.use('/users', auth);
 router.use('/water', water);
 
 export default router;
