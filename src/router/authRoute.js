@@ -11,13 +11,13 @@ import { registerUserSchema } from '../validation/authValidation.js';
 
 const router = Router();
 
-router.get(
+router.post(
   '/register',
   validateBody(registerUserSchema),
   ctrlWrapper(userController),
 );
-router.get('/login', ctrlWrapper(loginController));
-router.get('/logout', ctrlWrapper(logoutUserController));
-router.get('/refresh', ctrlWrapper(refreshUserSessionController));
+router.post('/login', ctrlWrapper(loginController));
+router.post('/logout', ctrlWrapper(logoutUserController));
+router.post('/refresh', ctrlWrapper(refreshUserSessionController));
 
 export default router;
