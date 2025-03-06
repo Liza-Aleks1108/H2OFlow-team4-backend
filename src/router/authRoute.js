@@ -11,6 +11,7 @@ import { registerUserSchema } from '../validation/authValidation.js';
 
 const router = Router();
 
+// POST /auth/register
 router.post(
   '/register',
   validateBody(registerUserSchema),
