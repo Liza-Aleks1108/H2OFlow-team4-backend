@@ -1,6 +1,14 @@
-export function errorHandler(error, req, res, next) {
-  const { status = 500, message } = error;
-  res.status(status).json({
-    message,
+import createHttpError from 'http-errors';
+
+export const errorHandler = (err, req, res, next) => {
+  if (err instanceof createHttpError.HttpError) {
+    res.status(err.status).json({
+      message: err.message,
+    });
+    return;
+  }
+  res.status(500).json({
+    message: 'Something went wrong',
+    error: err.message,
   });
-}
+};
