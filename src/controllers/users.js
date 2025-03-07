@@ -2,6 +2,7 @@ import {
   login,
   logoutUser,
   refreshUsersSession,
+  registerUser,
   requestResetToken,
 } from '../services/auth.js';
 
@@ -30,27 +31,14 @@ export const getUsersCountController = async (req, res, next) => {
 };
 
 // регистрация пользователя
-export const userController = async (req, res, next) => {
-  try {
-    const { name, email, password } = req.body;
+export const registerUserController = async (req, res) => {
+  const user = await registerUser(req.body);
 
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    const newUser = new UserCollection({
-      name,
-      email,
-      password: hashedPassword,
-    });
-
-    await newUser.save();
-
-    return res.status(201).json({
-      message: 'User successfully registered!',
-      user: newUser,
-    });
-  } catch (error) {
-    next(error);
-  }
+  res.status(201).json({
+    status: 201,
+    message: 'Successfully registered a user!',
+    data: user,
+  });
 };
 
 // логин пользователя

@@ -3,7 +3,7 @@ import {
   loginController,
   logoutUserController,
   refreshUserSessionController,
-  userController,
+  registerUserController,
 } from '../controllers/users.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
@@ -11,11 +11,10 @@ import { registerUserSchema } from '../validation/authValidation.js';
 
 const router = Router();
 
-// POST /auth/register
 router.post(
   '/register',
   validateBody(registerUserSchema),
-  ctrlWrapper(userController),
+  ctrlWrapper(registerUserController),
 );
 router.post('/login', ctrlWrapper(loginController));
 router.post('/logout', ctrlWrapper(logoutUserController));
