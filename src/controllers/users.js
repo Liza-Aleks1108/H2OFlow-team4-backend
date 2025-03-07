@@ -1,8 +1,31 @@
-import { login, logoutUser, refreshUsersSession } from '../services/auth.js';
+import {
+  login,
+  logoutUser,
+  refreshUsersSession,
+  requestResetToken,
+} from '../services/auth.js';
 
 import bcrypt from 'bcryptjs';
+import createHttpError from 'http-errors';
+import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 import { ONE_DAY } from '../constants/index.js';
 import { UserCollection } from '../dB/user.js';
+import { updateUser } from '../services/users.js';
+import { getEnvVar } from '../utils/getEnvVar.js';
+
+export const getUsersCountController = async (req, res, next) => {
+  try {
+    const userCount = await UserCollection.countDocuments();
+
+    return res.status(200).json({
+      message: 'Total number of users',
+      count: userCount,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 // регистрация пользователя
 export const userController = async (req, res, next) => {
@@ -89,4 +112,112 @@ export const refreshUserSessionController = async (req, res) => {
       accessToken: session.accessToken,
     },
   });
+};
+
+export const updateUserController = async (req, res, next) => {
+  try {
+    const { _id: userId } = req.user;
+    const payload = req.body;
+    const updatedUser = await updateUser(userId, payload);
+
+    if (!updatedUser) {
+      throw createHttpError(404, 'User not found');
+    }
+    return res.status(200).json({
+      message: 'User successfully updated!',
+      user: updatedUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getUserController = async (req, res, next) => {
+  try {
+    let { usertId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(usertId)) {
+      return next(createHttpError(400, 'Invalid contactId format'));
+    }
+
+    usertId = new mongoose.Types.ObjectId(usertId);
+
+    const user = await UserCollection.findById(usertId);
+
+    if (!user) {
+      throw createHttpError(404, 'User not found');
+    }
+
+    return res.status(200).json({
+      message: 'User successfully found!',
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+//Сброс пароля через Email
+export const requestResetEmailController = async (req, res) => {
+  await requestResetToken(req.body.email);
+  res.json({
+    message: 'Reset password email was successfully sent!',
+    status: 200,
+    data: {},
+  });
+};
+
+export const resetPasswordController = async (req, res, next) => {
+  const { token, password } = req.body;
+
+  if (!token || !password) {
+    return next(createHttpError(400, 'Token and password are required'));
+  }
+
+  try {
+    const decoded = jwt.verify(token, getEnvVar('JWT_SECRET'));
+
+    const user = await UserCollection.findOne({ email: decoded.email });
+    if (!user) {
+      throw createHttpError(404, 'User not found');
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).send('Password reset successfully');
+  } catch (error) {
+    return next(createHttpError(400, 'Invalid or expired token'));
+  }
+};
+
+export const resetPasswordPageController = (req, res, next) => {
+  const { token } = req.query;
+
+  if (!token) {
+    return next(createHttpError(400, 'Token is required'));
+  }
+
+  try {
+    const decoded = jwt.verify(token, getEnvVar('JWT_SECRET'));
+
+    res.status(200).send(`
+      <html>
+        <body>
+          <h1>Reset your password</h1>
+          <form action="/reset-password" method="POST">
+            <input type="hidden" name="token" value="${token}" />
+            <label for="password">New Password:</label>
+            <input type="password" id="password" name="password" required />
+            <button type="submit">Reset Password</button>
+          </form>
+        </body>
+      </html>
+    `);
+  } catch (error) {
+    return next(createHttpError(400, 'Invalid or expired token'));
+  }
 };
