@@ -6,10 +6,13 @@ const waterVolumeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    date: {
+    day: {
       type: String,
       required: true,
-      match: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/,
+    },
+    time: {
+      type: String,
+      required: true,
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,

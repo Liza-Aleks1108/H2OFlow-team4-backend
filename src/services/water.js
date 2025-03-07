@@ -30,6 +30,21 @@ export const updatedWoter = async (woterId, userId, payload, options = {}) => {
   };
 };
 
+export const searchByDate = async (date) => {
+  const oneDay = await WaterCollection.find({ day: { $eq: date } });
+
+  return oneDay;
+};
+
+export const searchForPeriod = async (beginning, end) => {
+  const oneDay = await WaterCollection.find()
+    .where('day')
+    .gte(beginning)
+    .lte(end);
+
+  return oneDay;
+};
+
 export const deleteWoterRecord = async (woterId, req) => {
   const record = await WaterCollection.findOneAndDelete({
     userId: req.user._id,
