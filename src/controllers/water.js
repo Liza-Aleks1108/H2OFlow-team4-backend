@@ -2,11 +2,12 @@ import createHttpError from 'http-errors';
 import {
   addingDrunkWater,
   deleteWoterRecord,
+  searchByDate,
+  searchForPeriod,
   updatedWoter,
 } from '../services/water.js';
 
 export const addingDrunkWaterController = async (req, res) => {
-  console.log(req.body);
   const oneTimeWaterIntake = await addingDrunkWater(req);
   res.status(201).json({
     status: 201,
@@ -32,6 +33,36 @@ export const patchWoterUpdatetController = async (req, res, next) => {
     status: 200,
     message: 'The entry has been edited successfully!',
     data: result.record,
+  });
+};
+
+export const inOneDayWaterController = async (req, res) => {
+  const date = req.body.day;
+  const oneDay = await searchByDate(date);
+
+  if (oneDay.length === 0) {
+    throw createHttpError(404, 'There is no data for this day');
+  }
+
+  res.json({
+    status: 200,
+    oneDay,
+  });
+};
+
+export const inOneMonthWaterController = async (req, res) => {
+  const beginning = req.body.beginningOfTheMonth;
+  const end = req.body.endOfTheMonth;
+
+  const oneMonth = await searchForPeriod(beginning, end);
+
+  if (oneMonth.length === 0) {
+    throw createHttpError(404, 'There is no data for this day');
+  }
+
+  res.json({
+    status: 200,
+    oneMonth,
   });
 };
 
