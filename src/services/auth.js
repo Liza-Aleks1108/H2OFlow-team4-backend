@@ -12,14 +12,14 @@ import { UserCollection } from '../dB/user.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
 import { sendEmail } from '../utils/sendMail.js';
 
-export const register = async (payload) => {
+export const registerUser = async (payload) => {
   const user = await UserCollection.findOne({ email: payload.email });
   if (user) throw createHttpError(409, 'Email in use');
 
-  const hashedPassword = await bcrypt.hash(payload.password, 10);
+  const encryptedPassword = await bcrypt.hash(payload.password, 10);
   return await UserCollection.create({
     ...payload,
-    password: hashedPassword,
+    password: encryptedPassword,
   });
 };
 

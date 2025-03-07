@@ -9,14 +9,13 @@ import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validationUpdateUserSchema } from '../validation/authValidation.js';
 const router = Router();
 
-router.use(authenticate);
-
 router.patch(
   '/update',
+  authenticate,
   validateBody(validationUpdateUserSchema),
   ctrlWrapper(updateUserController),
 );
 
-router.get('/:userId', ctrlWrapper(getUserController));
+router.get('/:userId', authenticate, ctrlWrapper(getUserController));
 
 export default router;
