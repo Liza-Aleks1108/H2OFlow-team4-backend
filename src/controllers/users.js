@@ -13,6 +13,8 @@ import { ONE_DAY } from '../constants/index.js';
 import { UserCollection } from '../dB/user.js';
 import { updateUser } from '../services/users.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 
 export const getUsersCountController = async (req, res, next) => {
   try {
@@ -117,8 +119,22 @@ export const refreshUserSessionController = async (req, res) => {
 export const updateUserController = async (req, res, next) => {
   try {
     const { _id: userId } = req.user;
-    const payload = req.body;
-    const updatedUser = await updateUser(userId, payload);
+    const photo = req.file;
+
+    let photoUrl;
+
+    if (photo) {
+      if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
+        photoUrl = await saveFileToCloudinary(photo);
+      } else {
+        photoUrl = await saveFileToUploadDir(photo);
+      }
+    }
+
+    const updatedUser = await updateUser(userId, {
+      ...req.body,
+      avatarUrl: photoUrl,
+    });
 
     if (!updatedUser) {
       throw createHttpError(404, 'User not found');
