@@ -16,6 +16,11 @@ export const userSchema = new mongoose.Schema(
   },
   { timestamps: true, versionKey: false },
 );
+userSchema.methods.toJSON = function () {
+  const user = this.toObject();
+  delete user.password;
+  return user;
+};
 
 const UserCollection =
   mongoose.models.users || mongoose.model('users', userSchema);
