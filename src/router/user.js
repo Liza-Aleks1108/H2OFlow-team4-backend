@@ -17,6 +17,6 @@ router.patch(
   ctrlWrapper(updateUserController),
 );
 
-router.get('/:contactId', ctrlWrapper(getUserController));
+router.get('/:userId', ctrlWrapper(getUserController));
 
 export default router;

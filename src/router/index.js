@@ -7,9 +7,9 @@ import water from './water.js';
 
 const router = Router();
 router.use('/users', countUser);
+router.use('/users', user);
 router.use('/users', auth);
 router.use('/auth', resetEmail);
-router.use('/users', user);
 router.use('/water', water);
 
 export default router;

@@ -134,15 +134,15 @@ export const updateUserController = async (req, res, next) => {
 
 export const getUserController = async (req, res, next) => {
   try {
-    let { usertId } = req.params;
+    let { userId } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(usertId)) {
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
       return next(createHttpError(400, 'Invalid contactId format'));
     }
 
-    usertId = new mongoose.Types.ObjectId(usertId);
+    userId = new mongoose.Types.ObjectId(userId);
 
-    const user = await UserCollection.findById(usertId);
+    const user = await UserCollection.findById(userId);
 
     if (!user) {
       throw createHttpError(404, 'User not found');
@@ -158,9 +158,9 @@ export const getUserController = async (req, res, next) => {
   }
 };
 
-//Сброс пароля через Email
 export const requestResetEmailController = async (req, res) => {
   await requestResetToken(req.body.email);
+
   res.json({
     message: 'Reset password email was successfully sent!',
     status: 200,
