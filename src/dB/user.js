@@ -11,7 +11,8 @@ export const userSchema = new mongoose.Schema(
     dailyNorm: { type: Number, default: 1500, min: 500, max: 15000 },
     avatarUrl: {
       type: String,
-      default: 'https://cloudinary.com/default-image.jpg',
+      default:
+        'https://res.cloudinary.com/dyfgsjdk5/image/upload/c_thumb,w_200,g_face/v1741464082/296fe121-5dfa-43f4-98b5-db50019738a7_hxqowp.jpg',
     },
   },
   { timestamps: true, versionKey: false },
