@@ -7,15 +7,16 @@ import { authenticate } from '../middlewares/authenticate.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validationUpdateUserSchema } from '../validation/authValidation.js';
-const router = Router();
 
-router.patch(
+const user = Router();
+
+user.patch(
   '/update',
   authenticate,
   validateBody(validationUpdateUserSchema),
   ctrlWrapper(updateUserController),
 );
 
-router.get('/:userId', authenticate, ctrlWrapper(getUserController));
+user.get('/:userId', authenticate, ctrlWrapper(getUserController));
 
-export default router;
+export default user;
