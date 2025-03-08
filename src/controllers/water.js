@@ -17,10 +17,10 @@ export const addingDrunkWaterController = async (req, res) => {
 };
 
 export const patchWoterUpdatetController = async (req, res, next) => {
-  const { woterId } = req.params;
+  const { waterId } = req.params;
   const { _id: userId } = req.user;
 
-  const result = await updatedWoter(woterId, userId, {
+  const result = await updatedWoter(waterId, userId, {
     ...req.body,
   });
 
@@ -67,8 +67,9 @@ export const inOneMonthWaterController = async (req, res) => {
 };
 
 export const deleteWotertController = async (req, res, next) => {
-  const { woterId } = req.params;
-  const record = await deleteWoterRecord(woterId, req);
+  const { waterId } = req.params;
+  console.log(req);
+  const record = await deleteWoterRecord(waterId, req);
 
   if (!record) {
     next(createHttpError(404, 'No such entry found!'));

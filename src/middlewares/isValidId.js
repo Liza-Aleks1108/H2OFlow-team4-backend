@@ -10,3 +10,11 @@ export const isValidID = (req, res, next) => {
 
   next();
 };
+
+export const isValidIdWater = (req, res, next) => {
+  const { waterId } = req.params;
+  if (!isValidObjectId(waterId)) {
+    throw createHttpError(404, 'The request is not valid');
+  }
+  next();
+};
