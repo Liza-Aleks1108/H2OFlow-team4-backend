@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { isValidID } from '../middlewares/isValidId.js';
+import { isValidIdWater } from '../middlewares/isValidId.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import {
@@ -15,8 +15,11 @@ import {
   validationInOneMonthShema,
   validationUpdateDrunkWaterShema,
 } from '../validation/water.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
 const router = Router();
+
+router.use(authenticate);
 
 router.post(
   '/',
@@ -25,7 +28,8 @@ router.post(
 );
 
 router.patch(
-  '/:woterId',
+  '/:waterId',
+  isValidIdWater,
   validateBody(validationUpdateDrunkWaterShema),
   ctrlWrapper(patchWoterUpdatetController),
 );
@@ -51,6 +55,6 @@ router.post(
 //     "endOfTheMonth": "2025-03-31"
 // }
 
-router.delete('/:woterId', isValidID, ctrlWrapper(deleteWotertController));
+router.delete('/:waterId', isValidIdWater, ctrlWrapper(deleteWotertController));
 
 export default router;
