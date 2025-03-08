@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import multer from 'multer';
 import { pinoHttp } from 'pino-http';
-import router from '../../H2OFlow-team4-backend/src/router/index.js';
+import router from '../../H2OFlow-team4-backend/src/routers/index.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { getEnvVar } from './utils/getEnvVar.js';
