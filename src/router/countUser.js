@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { getUsersCountController } from '../controllers/users.js';
 
-const countUser = Router();
+const router = Router();
 
-countUser.get('/count', getUsersCountController);
+router.get('/count', getUsersCountController);
 
-export default countUser;
+export default router;
