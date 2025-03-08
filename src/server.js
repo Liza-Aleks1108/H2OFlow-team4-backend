@@ -26,7 +26,7 @@ export const startServer = async () => {
   app.use(cookieParser());
   app.use(
     cors({
-      origin: 'https://h2-o-flow-team4.vercel.app/',
+      origin: 'https://h2-o-flow-team4.vercel.app',
       credentials: true,
     }),
   );
