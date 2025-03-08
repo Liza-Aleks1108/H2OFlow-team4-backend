@@ -17,24 +17,24 @@ import {
 } from '../validation/water.js';
 import { authenticate } from '../middlewares/authenticate.js';
 
-const water = Router();
+const router = Router();
 
-water.use(authenticate);
+router.use(authenticate);
 
-water.post(
+router.post(
   '/',
   validateBody(validationDrunkWaterShema),
   ctrlWrapper(addingDrunkWaterController),
 );
 
-water.patch(
+router.patch(
   '/:waterId',
   isValidIdWater,
   validateBody(validationUpdateDrunkWaterShema),
   ctrlWrapper(patchWoterUpdatetController),
 );
 
-water.post(
+router.post(
   '/in-one-day',
   validateBody(validationInOneDayShema),
   ctrlWrapper(inOneDayWaterController),
@@ -44,7 +44,7 @@ water.post(
 // "day": "2025-03-05"
 // }
 
-water.post(
+router.post(
   '/in-one-month',
   validateBody(validationInOneMonthShema),
   ctrlWrapper(inOneMonthWaterController),
@@ -55,6 +55,6 @@ water.post(
 //     "endOfTheMonth": "2025-03-31"
 // }
 
-water.delete('/:waterId', isValidIdWater, ctrlWrapper(deleteWotertController));
+router.delete('/:waterId', isValidIdWater, ctrlWrapper(deleteWotertController));
 
-export default water;
+export default router;
