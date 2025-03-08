@@ -24,7 +24,12 @@ export const startServer = async () => {
   );
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
-  app.use(cors());
+  app.use(
+    cors({
+      origin: 'https://h2-o-flow-team4.vercel.app',
+      credentials: true,
+    }),
+  );
 
   const logger = pinoHttp({
     transport: {
