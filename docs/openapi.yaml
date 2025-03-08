@@ -7,12 +7,62 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   description: API for tracking the amount of water
 tags:
-  # теги, що ви будете використовувати
+  - name: Users
+    description: Operations about users.
+  - name: Water
+    description: Operations about water.
+  - name: Auth
+    description: Operations for reset email.
 servers:
   - url: http://localhost:3000
-  - url: #посилання на задеплоєний сайт
+  - url: https://h2oflow-team4-backend.onrender.com
 paths:
-  # тут будуть посилання на ендпоінти
+  # auth
+  /auth/request-reset-email:
+    post: 
+      $ref: ../swagger/path/auth/post-request.yaml
+  /auth/reset-password:
+    get: 
+      $ref: ../swagger/path/auth/get-reset-psw.yaml
+  /auth/reset-password:
+    post: 
+      $ref: ../swagger/path/auth/post-reset-psw.yaml
+   
+  # users
+  /users/register:
+    post:
+      $ref: ../swagger/path/users/post-register.yaml
+  /users/login:
+    post:
+      $ref: ../swagger/path/users/post-login.yaml
+  /users/logout:
+    post:
+      $ref: ../swagger/path/users/post-logout.yaml
+  /users/refresh:
+    post:
+      $ref: ../swagger/path/users/post-refresh.yaml
+  /users/update:
+    post:
+      $ref: ../swagger/path/users/patch.yaml
+  /users/{id}:
+    get:
+      $ref: ../swagger/path/users/{id}/get.yaml
+   /users/count:
+    get:
+      $ref: ../swagger/path/users/get.yaml
+      
+
+# water
+  /water:
+    post: 
+      $ref: ../swagger/path/water/post.yaml
+  /water/{id}:
+    patch: 
+      $ref: ../swagger/path/water/{id}/patch.yaml
+  /water/{id}:
+    delete: 
+      $ref: ../swagger/path/water/{id}/delete.yaml
+
 components:
   securitySchemes:
     bearerAuth:
