@@ -1,3 +1,4 @@
+import { Router } from 'express';
 import {
   requestResetEmailController,
   resetPasswordController,
@@ -6,14 +7,15 @@ import {
 import { validateBody } from '../middlewares/validateBody.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { requestResetEmailSchema } from '../validation/authValidation.js';
-import router from './authRoute.js';
 
-router.post(
+const resetEmail = Router();
+
+resetEmail.post(
   '/request-reset-email',
   validateBody(requestResetEmailSchema),
   ctrlWrapper(requestResetEmailController),
 );
-router.post('/reset-password', resetPasswordController);
-router.get('/reset-password', resetPasswordPageController);
+resetEmail.post('/reset-password', resetPasswordController);
+resetEmail.get('/reset-password', resetPasswordPageController);
 
-export default router;
+export default resetEmail;

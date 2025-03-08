@@ -9,15 +9,15 @@ import { validateBody } from '../middlewares/validateBody.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { registerUserSchema } from '../validation/authValidation.js';
 
-const router = Router();
+const authRouter = Router();
 
-router.post(
+authRouter.post(
   '/register',
   validateBody(registerUserSchema),
   ctrlWrapper(registerUserController),
 );
-router.post('/login', ctrlWrapper(loginController));
-router.post('/logout', ctrlWrapper(logoutUserController));
-router.post('/refresh', ctrlWrapper(refreshUserSessionController));
+authRouter.post('/login', ctrlWrapper(loginController));
+authRouter.post('/logout', ctrlWrapper(logoutUserController));
+authRouter.post('/refresh', ctrlWrapper(refreshUserSessionController));
 
-export default router;
+export default authRouter;
