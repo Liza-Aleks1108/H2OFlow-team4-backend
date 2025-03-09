@@ -24,14 +24,15 @@ export const registerUser = async (payload) => {
 };
 
 export const login = async (payload) => {
-  const user = await UserCollection.findOne({
-    email: payload.email,
-  });
-  if (!user) throw createHttpError(401, 'Email or password is wrong');
-  const isPasswordValid = await bcrypt.compare(payload.password, user.password);
-  if (!isPasswordValid)
-    throw createHttpError(401, 'Email or password is wrong');
+  const user = await UserCollection.findOne({ email: payload.email });
 
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+  const isEqual = await bcrypt.compare(payload.password, user.password);
+  if (!isEqual) {
+    throw createHttpError(401, 'Unauthorized');
+  }
   await SessionsCollection.deleteOne({ userId: user._id });
 
   const accessToken = randomBytes(30).toString('base64');
@@ -70,7 +71,6 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
     _id: new ObjectId(sessionId),
     refreshToken,
   });
-  console.log('Сессия:', session);
 
   if (!session) {
     throw createHttpError(401, 'Session not found');
@@ -90,7 +90,6 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
   });
 
   const newSessionData = await SessionsCollection.create(newSession);
-  console.log('Новая сессия с данными:', newSessionData);
 
   return newSessionData;
 };
