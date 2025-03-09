@@ -193,7 +193,7 @@ export const resetPasswordController = async (req, res, next) => {
 
 export const resetPasswordPageController = (req, res, next) => {
   const { token } = req.query;
-
+  console.log('TOKEN', token);
   if (!token) {
     return next(createHttpError(400, 'Token is required'));
   }
@@ -205,7 +205,7 @@ export const resetPasswordPageController = (req, res, next) => {
       <html>
         <body>
           <h1>Reset your password</h1>
-          <form action="/reset-password" method="POST">
+          <form action="/auth/reset-password" method="POST">
             <input type="hidden" name="token" value="${token}" />
             <label for="password">New Password:</label>
             <input type="password" id="password" name="password" required />
