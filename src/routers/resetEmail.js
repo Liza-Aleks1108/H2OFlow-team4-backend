@@ -15,7 +15,9 @@ router.post(
   validateBody(requestResetEmailSchema),
   ctrlWrapper(requestResetEmailController),
 );
-router.post('/reset-password', resetPasswordController);
+
 router.get('/reset-password', resetPasswordPageController);
+
+router.post('/reset-password', resetPasswordController);
 
 export default router;
