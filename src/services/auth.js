@@ -13,14 +13,27 @@ import { getEnvVar } from '../utils/getEnvVar.js';
 import { sendEmail } from '../utils/sendMail.js';
 
 export const registerUser = async (payload) => {
-  const user = await UserCollection.findOne({ email: payload.email });
-  if (user) throw createHttpError(409, 'Email in use');
+  const existingUser = await UserCollection.findOne({ email: payload.email });
+  if (existingUser) throw createHttpError(409, 'Email in use');
 
   const encryptedPassword = await bcrypt.hash(payload.password, 10);
-  return await UserCollection.create({
+  const newUser = await UserCollection.create({
     ...payload,
     password: encryptedPassword,
   });
+
+  const accessToken = randomBytes(30).toString('base64');
+  const refreshToken = randomBytes(30).toString('base64');
+
+  await SessionsCollection.create({
+    userId: newUser._id,
+    accessToken,
+    refreshToken,
+    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+    refreshTokenValidUntil: new Date(Date.now() + ONE_DAY),
+  });
+
+  return { user: newUser, accessToken };
 };
 
 export const login = async (payload) => {
