@@ -2,7 +2,13 @@ import mongoose from 'mongoose';
 
 export const userSchema = new mongoose.Schema(
   {
-    name: { type: String, minlength: 2, maxlength: 12, default: '' },
+    name: {
+      type: String,
+      minlength: 2,
+      maxlength: 12,
+      default: 'User',
+      required: false,
+    },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     gender: { type: String, enum: ['woman', 'man'], default: 'woman' },
@@ -12,7 +18,7 @@ export const userSchema = new mongoose.Schema(
     avatarUrl: {
       type: String,
       default:
-        'https://res.cloudinary.com/dyfgsjdk5/image/upload/c_thumb,w_200,g_face/v1741464082/296fe121-5dfa-43f4-98b5-db50019738a7_hxqowp.jpg',
+        'https://collection.cloudinary.com/dojuslnjs/d637fb90dcf69166ae1e1c04c01fb63e?',
     },
   },
   { timestamps: true, versionKey: false },
