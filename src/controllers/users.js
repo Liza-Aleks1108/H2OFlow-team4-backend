@@ -9,7 +9,6 @@ import {
 import bcrypt from 'bcryptjs';
 import createHttpError from 'http-errors';
 import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
 import { ONE_DAY } from '../constants/index.js';
 import { UserCollection } from '../dB/user.js';
 import { updateUser } from '../services/users.js';
@@ -37,7 +36,10 @@ export const registerUserController = async (req, res) => {
   res.status(201).json({
     status: 201,
     message: 'Successfully registered a user!',
-    data: user,
+    data: {
+      user,
+      accessToken: user.accessToken,
+    },
   });
 };
 
@@ -138,13 +140,7 @@ export const updateUserController = async (req, res, next) => {
 
 export const getUserController = async (req, res, next) => {
   try {
-    let { userId } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return next(createHttpError(400, 'Invalid contactId format'));
-    }
-
-    userId = new mongoose.Types.ObjectId(userId);
+    let userId = req.user._id;
 
     const user = await UserCollection.findById(userId);
 

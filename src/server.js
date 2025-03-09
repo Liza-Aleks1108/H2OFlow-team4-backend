@@ -4,11 +4,11 @@ import dotenv from 'dotenv';
 import express from 'express';
 import multer from 'multer';
 import { pinoHttp } from 'pino-http';
-import router from './routers/index.js';
+import { UPLOAD_DIR } from './constants/index.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import router from './routers/index.js';
 import { getEnvVar } from './utils/getEnvVar.js';
-import { UPLOAD_DIR } from './constants/index.js';
 
 dotenv.config();
 
