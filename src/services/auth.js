@@ -15,7 +15,6 @@ import {
   validateCode,
 } from '../utils/googleOAuth2.js';
 import { sendEmail } from '../utils/sendMail.js';
-
 export const registerUser = async (payload) => {
   const existingUser = await UserCollection.findOne({ email: payload.email });
   if (existingUser) throw createHttpError(409, 'Email in use');
@@ -166,7 +165,7 @@ export const loginOrSignupWithGoogle = async (code) => {
     });
   }
 
-  const newSession = createSession();
+  const newSession = createSession(user._id);
 
   return await SessionsCollection.create({
     userId: user._id,
