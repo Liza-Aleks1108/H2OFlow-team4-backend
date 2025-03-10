@@ -34,7 +34,7 @@ router.patch(
   ctrlWrapper(patchWoterUpdatetController),
 );
 
-router.get(
+router.post(
   '/in-one-day',
   validateBody(validationInOneDayShema),
   ctrlWrapper(inOneDayWaterController),
@@ -44,7 +44,7 @@ router.get(
 // "day": "2025-03-05"
 // }
 
-router.get(
+router.post(
   '/in-one-month',
   validateBody(validationInOneMonthShema),
   ctrlWrapper(inOneMonthWaterController),
