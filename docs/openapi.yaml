@@ -62,6 +62,13 @@ paths:
   /water/{id}:
     delete: 
       $ref: ../swagger/path/water/{id}/delete.yaml
+  /water/in-one-day:
+    get: 
+      $ref: ../swagger/path/water/get-day.yaml
+  /water/in-one-month:
+    get: 
+      $ref: ../swagger/path/water/get-month.yaml
+      
 
 components:
   securitySchemes:
