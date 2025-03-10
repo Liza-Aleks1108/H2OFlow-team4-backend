@@ -1,0 +1,30 @@
+tags:
+  - Auth
+summary: Confirm Google OAuth login
+operationId: confirmGoogleOAuth
+description: 'Logs in a user via Google OAuth using a provided authorization code'
+security:
+  - bearerAuth: []
+requestBody:
+  description: 'Google OAuth authorization code'
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          code:
+            type: string
+            example: '4/0AfJohXrZ9...'
+        required:
+          - code
+
+responses:
+  '200':
+    $ref: postGoogle-200.yaml
+
+  '400':
+    $ref: ../../../components/responses/400.yaml
+
+  '500':
+    $ref: ../../../components/responses/500.yaml

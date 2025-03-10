@@ -1,0 +1,28 @@
+type: object
+properties:
+  _id:
+    type: string
+    example: '65d1e3c7f1c1234b567890ab'
+  userId:
+    type: string
+    example: '64a62c25f5c77f001c5a3d2e'
+  volume:
+    type: string
+    example: '250'
+    description: 'Amount of water consumed (ml)'
+  day:
+    type: string
+    example: '2025-03-10'
+    description: 'Date of intake (YYYY-MM-DD)'
+  time:
+    type: string
+    example: '14:30'
+    description: 'Time of intake (HH:mm)'
+  createdAt:
+    type: string
+    format: date-time
+    example: '2025-03-10T14:30:00.000Z'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2025-03-10T15:00:00.000Z'

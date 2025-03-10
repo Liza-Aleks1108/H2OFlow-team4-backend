@@ -1,0 +1,20 @@
+description: 'User successfully registered'
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 201
+        message:
+          type: string
+          example: 'Successfully registered a user!'
+        data:
+          type: object
+          properties:
+            user:
+              $ref: ../../../components/schemas/user.yaml
+            accessToken:
+              type: string
+              example: 'abc123xgf4b62bYVrd53s565nt225'
