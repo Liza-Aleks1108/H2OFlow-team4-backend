@@ -1,5 +1,6 @@
 import {
   login,
+  loginOrSignupWithGoogle,
   logoutUser,
   refreshUsersSession,
   registerUser,
@@ -13,6 +14,7 @@ import { ONE_DAY } from '../constants/index.js';
 import { UserCollection } from '../dB/user.js';
 import { updateUser } from '../services/users.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
+import { generateAuthUrl } from '../utils/googleOAuth2.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 
@@ -217,4 +219,29 @@ export const resetPasswordPageController = (req, res, next) => {
   } catch (error) {
     return next(createHttpError(400, 'Invalid or expired token'));
   }
+};
+
+// Google валидация
+export const getGoogleOAuthUrlController = async (req, res) => {
+  const url = generateAuthUrl();
+  res.json({
+    status: 200,
+    message: 'Successfully get Google OAuth url!',
+    data: {
+      url,
+    },
+  });
+};
+
+export const loginWithGoogleController = async (req, res) => {
+  const session = await loginOrSignupWithGoogle(req.body.code);
+  setupSession(res, session);
+
+  res.json({
+    status: 200,
+    message: 'Successfully logged in via Google OAuth!',
+    data: {
+      accessToken: session.accessToken,
+    },
+  });
 };

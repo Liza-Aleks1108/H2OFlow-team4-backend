@@ -22,3 +22,7 @@ export const validationUpdateUserSchema = Joi.object({
 export const requestResetEmailSchema = Joi.object({
   email: Joi.string().email().required(),
 });
+
+export const loginWithGoogleOAuthSchema = Joi.object({
+  code: Joi.string().required(),
+});

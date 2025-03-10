@@ -5,7 +5,7 @@ export const userSchema = new mongoose.Schema(
     name: {
       type: String,
       minlength: 2,
-      maxlength: 12,
+      maxlength: 20,
       default: 'User',
       required: false,
     },
