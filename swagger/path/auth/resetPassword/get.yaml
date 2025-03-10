@@ -1,0 +1,26 @@
+tags:
+  - Auth
+summary: Password reset page
+operationId: resetPasswordPage
+description: 'Displays an HTML page for password reset'
+security:
+  - bearerAuth: []
+parameters:
+  - name: token
+    in: query
+    required: true
+    schema:
+      type: string
+    description: 'Password reset token'
+
+responses:
+  '200':
+    description: 'HTML page for password reset'
+    content:
+      text/html:
+        schema:
+          type: string
+          example: '<html><body>...</body></html>'
+
+  '400':
+    $ref: '../../../components/responses/400.yaml'

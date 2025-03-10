@@ -1,0 +1,40 @@
+tags:
+  - User
+summary: Update user profile
+operationId: updateUser
+description: 'Allows authenticated users to update their profile information'
+security:
+  - bearerAuth: []
+
+requestBody:
+  description: 'User profile update data'
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../../components/schemas/user.yaml'
+    multipart/form-data:
+      schema:
+        allOf:
+          - $ref: '../../../components/schemas/user.yaml'
+          - type: object
+            properties:
+              avatar:
+                type: string
+                format: binary
+                description: 'User avatar image file'
+
+responses:
+  '200':
+    $ref: updateUser-200.yaml
+
+  '400':
+    $ref: '../../../components/responses/400.yaml'
+
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+
+  '404':
+    $ref: '../../../components/responses/404.yaml'
+  '500':
+    $ref: '../../../components/responses/404.yaml'
