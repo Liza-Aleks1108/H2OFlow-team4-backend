@@ -1,0 +1,14 @@
+tags:
+  - Auth
+summary: Get Google OAuth authorization URL
+operationId: getGoogleOAuthUrl
+description: 'Returns a URL to start Google OAuth authentication'
+security:
+  - bearerAuth: []
+responses:
+  '200':
+    $ref: getGoogle200.yaml
+  '400':
+    $ref: ../../../components/responses/400.yaml
+  '500':
+    $ref: ../../../components/responses/500.yaml

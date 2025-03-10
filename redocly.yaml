@@ -1,6 +1,3 @@
-# redocly.yaml
-
-# See https://redocly.com/docs/cli/configuration/ for more information.
 apis:
   sample@v1:
     root: docs/openapi.yaml
@@ -16,7 +13,7 @@ theme:
         primary:
           main: '#32329f'
     generateCodeSamples:
-      languages: # Array of language config objects; indicates in which languages to generate code samples.
+      languages:
         - lang: curl
         - lang: Node.js
         - lang: JavaScript

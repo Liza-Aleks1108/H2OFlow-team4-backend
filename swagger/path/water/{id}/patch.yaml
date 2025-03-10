@@ -1,0 +1,58 @@
+tags:
+  - Water
+summary: Update water intake record
+operationId: updateDrunkWater
+description: 'Updates a water intake record by its ID'
+security:
+  - bearerAuth: []
+
+parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      type: string
+    description: 'ID of the water intake record to update'
+
+requestBody:
+  description: 'Updated water intake data'
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          volume:
+            type: string
+            example: '250'
+            description: 'Updated amount of water consumed (ml)'
+          day:
+            type: string
+            example: '2025-03-10'
+            description: 'Updated date of intake (YYYY-MM-DD)'
+          time:
+            type: string
+            example: '15:00'
+            description: 'Updated time of intake (HH:mm)'
+
+responses:
+  '200':
+    description: 'Water intake record updated successfully'
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'The entry has been edited successfully!'
+            data:
+              $ref: '../../../components/schemas/water.yaml'
+  '400':
+    $ref: '../../../components/responses/400.yaml'
+
+  '404':
+    $ref: '../../../components/responses/404.yaml'

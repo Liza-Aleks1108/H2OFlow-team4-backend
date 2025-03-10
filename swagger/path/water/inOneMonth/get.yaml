@@ -1,0 +1,37 @@
+tags:
+  - Water
+summary: Get water consumption for a specific period
+operationId: getWaterInOneMonth
+description: 'Returns water consumption data for a specified date range'
+security:
+  - bearerAuth: []
+requestBody:
+  description: 'Date range for which water consumption data is needed'
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          beginningOfTheMonth:
+            type: string
+            example: '2025-03-01'
+          endOfTheMonth:
+            type: string
+            example: '2025-03-31'
+        required:
+          - beginningOfTheMonth
+          - endOfTheMonth
+
+responses:
+  '200':
+    $ref: getInOneMonth-200.yaml
+
+  '400':
+    $ref: '../../../components/responses/400.yaml'
+
+  '404':
+    $ref: '../../../components/responses/404.yaml'
+
+  '500':
+    $ref: '../../../components/responses/500.yaml'

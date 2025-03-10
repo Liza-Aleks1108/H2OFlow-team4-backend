@@ -1,0 +1,11 @@
+description: 'User successfully updated'
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'User successfully updated!'
+        user:
+          $ref: '../../../components/schemas/user.yaml'
