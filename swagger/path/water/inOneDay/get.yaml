@@ -1,0 +1,29 @@
+tags:
+  - Water
+summary: Get water consumption for a specific day
+operationId: getWaterInOneDay
+description: 'Returns water consumption data for a given day'
+security:
+  - bearerAuth: []
+parameters:
+  - name: day
+    in: query
+    description: 'Date for which water consumption data is needed'
+    required: true
+    schema:
+      type: string
+      format: date
+      example: '2025-03-05'
+
+responses:
+  '200':
+    $ref: getInOneDay-200.yaml
+
+  '400':
+    $ref: '../../../components/responses/400.yaml'
+
+  '404':
+    $ref: '../../../components/responses/404.yaml'
+
+  '500':
+    $ref: '../../../components/responses/500.yaml'

@@ -1,0 +1,51 @@
+type: object
+required:
+  - email
+properties:
+  _id:
+    description: 'User id'
+    type: string
+    example: '83cf00c8706c3609f8a91ae9'
+  name:
+    description: 'User name'
+    type: string
+    example: 'Alex Jonson'
+    default: 'User'
+  email:
+    description: 'User email'
+    type: string
+    example: 'jonson_a@gmail.com'
+  gender:
+    description: 'User gender'
+    type: string
+    enum: ['woman', 'man']
+    example: 'man'
+    default: 'woman'
+  weight:
+    description: 'User weight in kilograms'
+    type: number
+    example: 67
+    default: 0
+  dailySportTime:
+    description: 'User sport time in hours per day'
+    type: number
+    example: 8
+    default: 0
+  dailyNorm:
+    description: 'Daily water intake in milliliters'
+    type: number
+    example: 1700
+    default: 1500
+  avatarUrl:
+    description: 'URL to the user profile photo'
+    type: string
+    example: 'https://res.cloudinary.com/ddtrmtbl8/image/upload/v1740747328/qbclx8i3i9zchrvi1git.jpg'
+    default: 'https://collection.cloudinary.com/dojuslnjs/d637fb90dcf69166ae1e1c04c01fb63e?'
+  createdAt:
+    type: string
+    format: date-time
+    example: '2025-03-10T14:30:00.000Z'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2025-03-10T15:00:00.000Z'

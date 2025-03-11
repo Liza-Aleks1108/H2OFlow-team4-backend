@@ -1,18 +1,20 @@
 import {
   login,
+  loginOrSignupWithGoogle,
   logoutUser,
   refreshUsersSession,
+  registerUser,
   requestResetToken,
 } from '../services/auth.js';
 
 import bcrypt from 'bcryptjs';
 import createHttpError from 'http-errors';
 import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
 import { ONE_DAY } from '../constants/index.js';
 import { UserCollection } from '../dB/user.js';
 import { updateUser } from '../services/users.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
+import { generateAuthUrl } from '../utils/googleOAuth2.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 
@@ -30,27 +32,14 @@ export const getUsersCountController = async (req, res, next) => {
 };
 
 // регистрация пользователя
-export const userController = async (req, res, next) => {
-  try {
-    const { name, email, password } = req.body;
+export const registerUserController = async (req, res) => {
+  const user = await registerUser(req.body);
 
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    const newUser = new UserCollection({
-      name,
-      email,
-      password: hashedPassword,
-    });
-
-    await newUser.save();
-
-    return res.status(201).json({
-      message: 'User successfully registered!',
-      user: newUser,
-    });
-  } catch (error) {
-    next(error);
-  }
+  res.status(201).json({
+    status: 201,
+    message: 'Successfully registered a user!',
+    data: user,
+  });
 };
 
 // логин пользователя
@@ -150,13 +139,7 @@ export const updateUserController = async (req, res, next) => {
 
 export const getUserController = async (req, res, next) => {
   try {
-    let { userId } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return next(createHttpError(400, 'Invalid contactId format'));
-    }
-
-    userId = new mongoose.Types.ObjectId(userId);
+    let userId = req.user._id;
 
     const user = await UserCollection.findById(userId);
 
@@ -212,7 +195,7 @@ export const resetPasswordController = async (req, res, next) => {
 
 export const resetPasswordPageController = (req, res, next) => {
   const { token } = req.query;
-
+  console.log('TOKEN', token);
   if (!token) {
     return next(createHttpError(400, 'Token is required'));
   }
@@ -224,7 +207,7 @@ export const resetPasswordPageController = (req, res, next) => {
       <html>
         <body>
           <h1>Reset your password</h1>
-          <form action="/reset-password" method="POST">
+          <form action="/auth/reset-password" method="POST">
             <input type="hidden" name="token" value="${token}" />
             <label for="password">New Password:</label>
             <input type="password" id="password" name="password" required />
@@ -236,4 +219,29 @@ export const resetPasswordPageController = (req, res, next) => {
   } catch (error) {
     return next(createHttpError(400, 'Invalid or expired token'));
   }
+};
+
+// Google валидация
+export const getGoogleOAuthUrlController = async (req, res) => {
+  const url = generateAuthUrl();
+  res.json({
+    status: 200,
+    message: 'Successfully get Google OAuth url!',
+    data: {
+      url,
+    },
+  });
+};
+
+export const loginWithGoogleController = async (req, res) => {
+  const session = await loginOrSignupWithGoogle(req.body.code);
+  setupSession(res, session);
+
+  res.json({
+    status: 200,
+    message: 'Successfully logged in via Google OAuth!',
+    data: {
+      accessToken: session.accessToken,
+    },
+  });
 };

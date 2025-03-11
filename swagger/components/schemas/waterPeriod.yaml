@@ -1,0 +1,26 @@
+type: object
+properties:
+  _id:
+    type: string
+    example: '65d1e3c7f1c1234b567890ab'
+  userId:
+    type: string
+    example: '64a62c25f5c77f001c5a3d2e'
+  day:
+    type: string
+    example: '2025-03-05'
+  time:
+    type: string
+    example: '14:30'
+    description: 'Time of intake (HH:mm)'
+  amount:
+    type: number
+    example: 1500
+  createdAt:
+    type: string
+    format: date-time
+    example: '2025-03-05T08:30:00.000Z'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2025-03-05T09:00:00.000Z'

@@ -1,0 +1,65 @@
+tags:
+  - Users
+summary: Update user profile
+operationId: updateUser
+description: 'Allows authenticated users to update their profile information'
+security:
+  - bearerAuth: []
+
+requestBody:
+  description: 'User profile update data'
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        properties:
+          name:
+            description: 'User name'
+            type: string
+            example: 'Alex Jonson'
+            default: 'User'
+          email:
+            description: 'User email'
+            type: string
+            example: 'jonson_a@gmail.com'
+          gender:
+            description: 'User gender'
+            type: string
+            enum: ['woman', 'man']
+            example: 'man'
+            default: 'woman'
+          weight:
+            description: 'User weight in kilograms'
+            type: number
+            example: 67
+            default: 0
+          dailySportTime:
+            description: 'User sport time in hours per day'
+            type: number
+            example: 8
+            default: 0
+          dailyNorm:
+            description: 'Daily water intake in milliliters'
+            type: number
+            example: 1700
+            default: 1500
+          photo:
+            description: "Link to contact's photo"
+            type: string
+            format: binary
+
+responses:
+  '200':
+    $ref: updateUser-200.yaml
+
+  '400':
+    $ref: '../../../components/responses/400.yaml'
+
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+
+  '404':
+    $ref: '../../../components/responses/404.yaml'
+  '500':
+    $ref: '../../../components/responses/404.yaml'

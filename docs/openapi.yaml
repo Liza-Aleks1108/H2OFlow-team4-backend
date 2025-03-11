@@ -7,14 +7,74 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   description: API for tracking the amount of water
 tags:
-  # теги, що ви будете використовувати
+  - name: Users
+    description: Operations about users.
+  - name: Water
+    description: Operations about water.
+  - name: Auth
+    description: Operations for reset email and Google authorization.
 servers:
-  - url: http://localhost:3000
-  - url: #посилання на задеплоєний сайт
+  # - url: http://127.0.0.1:3000
+  #   description: Local development server
+  - url: https://h2oflow-team4-backend.onrender.com
+    description: Production server
 paths:
-  # тут будуть посилання на ендпоінти
+  # auth
+  /auth/request-reset-email:
+    post:
+      $ref: ../swagger/path/auth/requestResetEmail/post.yaml
+  /auth/reset-password:
+    get:
+      $ref: ../swagger/path/auth/resetPassword/get.yaml
+    post:
+      $ref: ../swagger/path/auth/resetPassword/post.yaml
+  /auth/get-oauth-url:
+    get:
+      $ref: ../swagger/path/auth/google/get.yaml
+  /auth/confirm-oauth:
+    post:
+      $ref: ../swagger/path/auth/google/post.yaml
+  # users
+  /users/register:
+    post:
+      $ref: ../swagger/path/users/register/post.yaml
+  /users/login:
+    post:
+      $ref: ../swagger/path/users/logIn/post.yaml
+  /users/logout:
+    post:
+      $ref: ../swagger/path/users/logOut/post.yaml
+  /users/refresh:
+    post:
+      $ref: ../swagger/path/users/refresh/post.yaml
+  /users/update:
+    patch:
+      $ref: ../swagger/path/users/updateUser/patch.yaml
+  /users:
+    get:
+      $ref: ../swagger/path/users/getUser/get.yaml
+  /users/count:
+    get:
+      $ref: ../swagger/path/users/countUsers/get.yaml
+
+  # water
+  /water:
+    post:
+      $ref: ../swagger/path/water/post.yaml
+  /water/{id}:
+    patch:
+      $ref: ../swagger/path/water/{id}/patch.yaml
+    delete:
+      $ref: ../swagger/path/water/{id}/delete.yaml
+  /water/in-one-day:
+    get:
+      $ref: ../swagger/path/water/inOneDay/get.yaml
+  /water/in-one-month:
+    get:
+      $ref: ../swagger/path/water/inOneMonth/get.yaml
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
+      bearerFormat: JWT

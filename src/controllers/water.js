@@ -2,11 +2,12 @@ import createHttpError from 'http-errors';
 import {
   addingDrunkWater,
   deleteWoterRecord,
+  searchByDate,
+  searchForPeriod,
   updatedWoter,
 } from '../services/water.js';
 
 export const addingDrunkWaterController = async (req, res) => {
-  console.log(req.body);
   const oneTimeWaterIntake = await addingDrunkWater(req);
   res.status(201).json({
     status: 201,
@@ -16,10 +17,10 @@ export const addingDrunkWaterController = async (req, res) => {
 };
 
 export const patchWoterUpdatetController = async (req, res, next) => {
-  const { woterId } = req.params;
+  const { waterId } = req.params;
   const { _id: userId } = req.user;
 
-  const result = await updatedWoter(woterId, userId, {
+  const result = await updatedWoter(waterId, userId, {
     ...req.body,
   });
 
@@ -35,9 +36,44 @@ export const patchWoterUpdatetController = async (req, res, next) => {
   });
 };
 
+export const inOneDayWaterController = async (req, res) => {
+  // const date = req.body.day;
+  const date = req.query.day;
+  const oneDay = await searchByDate(date);
+
+  if (oneDay.length === 0) {
+    throw createHttpError(404, 'There is no data for this day');
+  }
+
+  res.json({
+    status: 200,
+    oneDay,
+  });
+};
+
+export const inOneMonthWaterController = async (req, res) => {
+  // const beginning = req.body.beginningOfTheMonth;
+  // const end = req.body.endOfTheMonth;
+
+  const beginning = req.query.beginningOfTheMonth;
+  const end = req.query.endOfTheMonth;
+
+  const oneMonth = await searchForPeriod(beginning, end);
+
+  if (oneMonth.length === 0) {
+    throw createHttpError(404, 'There is no data for this day');
+  }
+
+  res.json({
+    status: 200,
+    oneMonth,
+  });
+};
+
 export const deleteWotertController = async (req, res, next) => {
-  const { woterId } = req.params;
-  const record = await deleteWoterRecord(woterId, req);
+  const { waterId } = req.params;
+  console.log(req);
+  const record = await deleteWoterRecord(waterId, req);
 
   if (!record) {
     next(createHttpError(404, 'No such entry found!'));

@@ -1,0 +1,16 @@
+description: 'User credentials'
+required: true
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: user@example.com
+        password:
+          type: string
+          example: examplePsw123!

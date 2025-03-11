@@ -11,15 +11,14 @@ import { upload } from '../middlewares/upload.js';
 
 const router = Router();
 
-router.use(authenticate);
-
 router.patch(
   '/update',
+  authenticate,
   validateBody(validationUpdateUserSchema),
   upload.single('photo'),
   ctrlWrapper(updateUserController),
 );
 
-router.get('/:userId', ctrlWrapper(getUserController));
+router.get('/', authenticate, ctrlWrapper(getUserController));
 
 export default router;
