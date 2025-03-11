@@ -30,14 +30,14 @@ export const updatedWoter = async (waterId, userId, payload, options = {}) => {
   };
 };
 
-export const searchByDate = async (date) => {
-  const oneDay = await WaterCollection.find({ day: { $eq: date } });
+export const searchByDate = async (date, userId) => {
+  const oneDay = await WaterCollection.find({ userId, day: { $eq: date } });
 
   return oneDay;
 };
 
-export const searchForPeriod = async (beginning, end) => {
-  const oneDay = await WaterCollection.find()
+export const searchForPeriod = async (beginning, end, userId) => {
+  const oneDay = await WaterCollection.find({ userId })
     .where('day')
     .gte(beginning)
     .lte(end);
