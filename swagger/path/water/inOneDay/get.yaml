@@ -5,19 +5,14 @@ operationId: getWaterInOneDay
 description: 'Returns water consumption data for a given day'
 security:
   - bearerAuth: []
-requestBody:
-  description: 'Date for which water consumption data is needed'
-  required: true
-  content:
-    application/json:
-      schema:
-        type: object
-        properties:
-          day:
-            type: string
-            example: '2025-03-05'
-        required:
-          - day
+parameters:
+  - name: day
+    in: query
+    description: 'Date for which water consumption data is needed'
+    required: true
+    schema:
+      type: string
+      example: '2025-03-05'
 
 responses:
   '200':

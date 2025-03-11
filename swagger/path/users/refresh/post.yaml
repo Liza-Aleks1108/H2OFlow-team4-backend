@@ -1,5 +1,5 @@
 tags:
-  - User
+  - Users
 summary: Refresh user session
 operationId: refreshUserSession
 description: 'Refresh access token using refresh token from cookies'
