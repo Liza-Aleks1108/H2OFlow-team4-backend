@@ -38,8 +38,9 @@ export const patchWoterUpdatetController = async (req, res, next) => {
 
 export const inOneDayWaterController = async (req, res) => {
   // const date = req.body.day;
+  const userId = req.user._id;
   const date = req.query.day;
-  const oneDay = await searchByDate(date);
+  const oneDay = await searchByDate(date, userId);
 
   if (oneDay.length === 0) {
     throw createHttpError(404, 'There is no data for this day');
@@ -54,11 +55,11 @@ export const inOneDayWaterController = async (req, res) => {
 export const inOneMonthWaterController = async (req, res) => {
   // const beginning = req.body.beginningOfTheMonth;
   // const end = req.body.endOfTheMonth;
-
+  const userId = req.user._id;
   const beginning = req.query.beginningOfTheMonth;
   const end = req.query.endOfTheMonth;
 
-  const oneMonth = await searchForPeriod(beginning, end);
+  const oneMonth = await searchForPeriod(beginning, end, userId);
 
   if (oneMonth.length === 0) {
     throw createHttpError(404, 'There is no data for this day');
