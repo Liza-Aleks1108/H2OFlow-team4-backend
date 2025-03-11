@@ -25,6 +25,7 @@ export const startServer = async () => {
   );
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
+  // added 35 packages
   app.use(
     cors({
       origin: ['http://127.0.0.1:3000', 'https://h2-o-flow-team4.vercel.app'],
