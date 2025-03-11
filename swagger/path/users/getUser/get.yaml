@@ -1,5 +1,5 @@
 tags:
-  - User
+  - Users
 summary: Get current user profile
 operationId: getUser
 description: 'Returns the profile data of the authenticated user'

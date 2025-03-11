@@ -5,24 +5,22 @@ operationId: getWaterInOneMonth
 description: 'Returns water consumption data for a specified date range'
 security:
   - bearerAuth: []
-requestBody:
-  description: 'Date range for which water consumption data is needed'
-  required: true
-  content:
-    application/json:
-      schema:
-        type: object
-        properties:
-          beginningOfTheMonth:
-            type: string
-            example: '2025-03-01'
-          endOfTheMonth:
-            type: string
-            example: '2025-03-31'
-        required:
-          - beginningOfTheMonth
-          - endOfTheMonth
+parameters:
+  - name: beginningOfTheMonth
+    in: query
+    description: 'Start date of the period'
+    required: true
+    schema:
+      type: string
+      example: '2025-03-01'
 
+  - name: endOfTheMonth
+    in: query
+    description: 'End date of the period'
+    required: true
+    schema:
+      type: string
+      example: '2025-03-31'
 responses:
   '200':
     $ref: getInOneMonth-200.yaml

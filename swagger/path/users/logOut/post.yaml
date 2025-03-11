@@ -1,5 +1,5 @@
 tags:
-  - User
+  - Users
 summary: User logout
 operationId: logoutUser
 description: 'Logs out the user and removes session data from cookies and database'

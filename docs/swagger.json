@@ -11,10 +11,6 @@
   },
   "servers": [
     {
-      "url": "http://127.0.0.1:3000",
-      "description": "Local development server"
-    },
-    {
       "url": "https://h2oflow-team4-backend.onrender.com",
       "description": "Production server"
     }
@@ -288,7 +284,7 @@
     "/users/register": {
       "post": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Register User",
         "operationId": "registerUser",
@@ -314,7 +310,7 @@
     "/users/login": {
       "post": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Login user",
         "operationId": "loginUser",
@@ -369,7 +365,7 @@
     "/users/logout": {
       "post": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "User logout",
         "operationId": "logoutUser",
@@ -392,7 +388,7 @@
     "/users/refresh": {
       "post": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Refresh user session",
         "operationId": "refreshUserSession",
@@ -415,7 +411,7 @@
     "/users/update": {
       "patch": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Update user profile",
         "operationId": "updateUser",
@@ -429,28 +425,55 @@
           "description": "User profile update data",
           "required": true,
           "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/user"
-              }
-            },
             "multipart/form-data": {
               "schema": {
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/user"
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "User name",
+                    "type": "string",
+                    "example": "Alex Jonson",
+                    "default": "User"
                   },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "avatar": {
-                        "type": "string",
-                        "format": "binary",
-                        "description": "User avatar image file"
-                      }
-                    }
+                  "email": {
+                    "description": "User email",
+                    "type": "string",
+                    "example": "jonson_a@gmail.com"
+                  },
+                  "gender": {
+                    "description": "User gender",
+                    "type": "string",
+                    "enum": [
+                      "woman",
+                      "man"
+                    ],
+                    "example": "man",
+                    "default": "woman"
+                  },
+                  "weight": {
+                    "description": "User weight in kilograms",
+                    "type": "number",
+                    "example": 67,
+                    "default": 0
+                  },
+                  "dailySportTime": {
+                    "description": "User sport time in hours per day",
+                    "type": "number",
+                    "example": 8,
+                    "default": 0
+                  },
+                  "dailyNorm": {
+                    "description": "Daily water intake in milliliters",
+                    "type": "number",
+                    "example": 1700,
+                    "default": 1500
+                  },
+                  "photo": {
+                    "description": "Link to contact's photo",
+                    "type": "string",
+                    "format": "binary"
                   }
-                ]
+                }
               }
             }
           }
@@ -477,7 +500,7 @@
     "/users": {
       "get": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Get current user profile",
         "operationId": "getUser",
@@ -503,7 +526,7 @@
     "/users/count": {
       "get": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Get total number of users",
         "operationId": "getUsersCount",
@@ -755,26 +778,19 @@
             "bearerAuth": []
           }
         ],
-        "requestBody": {
-          "description": "Date for which water consumption data is needed",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "day": {
-                    "type": "string",
-                    "example": "2025-03-05"
-                  }
-                },
-                "required": [
-                  "day"
-                ]
-              }
+        "parameters": [
+          {
+            "name": "day",
+            "in": "query",
+            "description": "Date for which water consumption data is needed",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2025-03-05"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/getInOneDay-200"
@@ -804,31 +820,28 @@
             "bearerAuth": []
           }
         ],
-        "requestBody": {
-          "description": "Date range for which water consumption data is needed",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "beginningOfTheMonth": {
-                    "type": "string",
-                    "example": "2025-03-01"
-                  },
-                  "endOfTheMonth": {
-                    "type": "string",
-                    "example": "2025-03-31"
-                  }
-                },
-                "required": [
-                  "beginningOfTheMonth",
-                  "endOfTheMonth"
-                ]
-              }
+        "parameters": [
+          {
+            "name": "beginningOfTheMonth",
+            "in": "query",
+            "description": "Start date of the period",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "2025-03-01"
+            }
+          },
+          {
+            "name": "endOfTheMonth",
+            "in": "query",
+            "description": "End date of the period",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "2025-03-31"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/getInOneMonth-200"
@@ -1217,6 +1230,11 @@
           "email"
         ],
         "properties": {
+          "_id": {
+            "description": "User id",
+            "type": "string",
+            "example": "83cf00c8706c3609f8a91ae9"
+          },
           "name": {
             "description": "User name",
             "type": "string",
@@ -1261,6 +1279,16 @@
             "type": "string",
             "example": "https://res.cloudinary.com/ddtrmtbl8/image/upload/v1740747328/qbclx8i3i9zchrvi1git.jpg",
             "default": "https://collection.cloudinary.com/dojuslnjs/d637fb90dcf69166ae1e1c04c01fb63e?"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-03-10T14:30:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-03-10T15:00:00.000Z"
           }
         }
       },
@@ -1315,8 +1343,12 @@
           },
           "day": {
             "type": "string",
-            "format": "date",
             "example": "2025-03-05"
+          },
+          "time": {
+            "type": "string",
+            "example": "14:30",
+            "description": "Time of intake (HH:mm)"
           },
           "amount": {
             "type": "number",

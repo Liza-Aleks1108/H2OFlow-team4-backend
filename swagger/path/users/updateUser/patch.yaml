@@ -1,5 +1,5 @@
 tags:
-  - User
+  - Users
 summary: Update user profile
 operationId: updateUser
 description: 'Allows authenticated users to update their profile information'
@@ -10,19 +10,44 @@ requestBody:
   description: 'User profile update data'
   required: true
   content:
-    application/json:
-      schema:
-        $ref: '../../../components/schemas/user.yaml'
     multipart/form-data:
       schema:
-        allOf:
-          - $ref: '../../../components/schemas/user.yaml'
-          - type: object
-            properties:
-              avatar:
-                type: string
-                format: binary
-                description: 'User avatar image file'
+        type: object
+        properties:
+          name:
+            description: 'User name'
+            type: string
+            example: 'Alex Jonson'
+            default: 'User'
+          email:
+            description: 'User email'
+            type: string
+            example: 'jonson_a@gmail.com'
+          gender:
+            description: 'User gender'
+            type: string
+            enum: ['woman', 'man']
+            example: 'man'
+            default: 'woman'
+          weight:
+            description: 'User weight in kilograms'
+            type: number
+            example: 67
+            default: 0
+          dailySportTime:
+            description: 'User sport time in hours per day'
+            type: number
+            example: 8
+            default: 0
+          dailyNorm:
+            description: 'Daily water intake in milliliters'
+            type: number
+            example: 1700
+            default: 1500
+          photo:
+            description: "Link to contact's photo"
+            type: string
+            format: binary
 
 responses:
   '200':
