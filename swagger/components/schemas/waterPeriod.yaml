@@ -8,7 +8,6 @@ properties:
     example: '64a62c25f5c77f001c5a3d2e'
   day:
     type: string
-    format: date
     example: '2025-03-05'
   time:
     type: string

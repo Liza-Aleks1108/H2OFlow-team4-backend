@@ -44,11 +44,10 @@ requestBody:
             type: number
             example: 1700
             default: 1500
-          avatarUrl:
-            description: 'URL to the user profile photo'
+          photo:
+            description: "Link to contact's photo"
             type: string
-            example: 'https://res.cloudinary.com/ddtrmtbl8/image/upload/v1740747328/qbclx8i3i9zchrvi1git.jpg'
-            default: 'https://collection.cloudinary.com/dojuslnjs/d637fb90dcf69166ae1e1c04c01fb63e?'
+            format: binary
 
 responses:
   '200':

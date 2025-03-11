@@ -12,7 +12,6 @@ properties:
     description: 'Amount of water consumed (ml)'
   day:
     type: string
-    format: date
     example: '2025-03-10'
     description: 'Date of intake (YYYY-MM-DD)'
   time:

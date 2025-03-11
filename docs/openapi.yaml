@@ -14,8 +14,8 @@ tags:
   - name: Auth
     description: Operations for reset email and Google authorization.
 servers:
-  - url: http://127.0.0.1:3000
-    description: Local development server
+  # - url: http://127.0.0.1:3000
+  #   description: Local development server
   - url: https://h2oflow-team4-backend.onrender.com
     description: Production server
 paths:

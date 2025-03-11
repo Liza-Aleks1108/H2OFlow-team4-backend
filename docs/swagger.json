@@ -11,10 +11,6 @@
   },
   "servers": [
     {
-      "url": "http://127.0.0.1:3000",
-      "description": "Local development server"
-    },
-    {
       "url": "https://h2oflow-team4-backend.onrender.com",
       "description": "Production server"
     }
@@ -288,7 +284,7 @@
     "/users/register": {
       "post": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Register User",
         "operationId": "registerUser",
@@ -314,7 +310,7 @@
     "/users/login": {
       "post": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Login user",
         "operationId": "loginUser",
@@ -472,11 +468,10 @@
                     "example": 1700,
                     "default": 1500
                   },
-                  "avatarUrl": {
-                    "description": "URL to the user profile photo",
+                  "photo": {
+                    "description": "Link to contact's photo",
                     "type": "string",
-                    "example": "https://res.cloudinary.com/ddtrmtbl8/image/upload/v1740747328/qbclx8i3i9zchrvi1git.jpg",
-                    "default": "https://collection.cloudinary.com/dojuslnjs/d637fb90dcf69166ae1e1c04c01fb63e?"
+                    "format": "binary"
                   }
                 }
               }
@@ -791,6 +786,7 @@
             "required": true,
             "schema": {
               "type": "string",
+              "format": "date",
               "example": "2025-03-05"
             }
           }
@@ -1234,6 +1230,11 @@
           "email"
         ],
         "properties": {
+          "_id": {
+            "description": "User id",
+            "type": "string",
+            "example": "83cf00c8706c3609f8a91ae9"
+          },
           "name": {
             "description": "User name",
             "type": "string",
@@ -1278,6 +1279,16 @@
             "type": "string",
             "example": "https://res.cloudinary.com/ddtrmtbl8/image/upload/v1740747328/qbclx8i3i9zchrvi1git.jpg",
             "default": "https://collection.cloudinary.com/dojuslnjs/d637fb90dcf69166ae1e1c04c01fb63e?"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-03-10T14:30:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-03-10T15:00:00.000Z"
           }
         }
       },
@@ -1299,7 +1310,6 @@
           },
           "day": {
             "type": "string",
-            "format": "date",
             "example": "2025-03-10",
             "description": "Date of intake (YYYY-MM-DD)"
           },
@@ -1333,7 +1343,6 @@
           },
           "day": {
             "type": "string",
-            "format": "date",
             "example": "2025-03-05"
           },
           "time": {

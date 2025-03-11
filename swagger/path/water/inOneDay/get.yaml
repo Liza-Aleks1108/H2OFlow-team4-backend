@@ -12,6 +12,7 @@ parameters:
     required: true
     schema:
       type: string
+      format: date
       example: '2025-03-05'
 
 responses:
