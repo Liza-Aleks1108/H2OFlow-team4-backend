@@ -47,13 +47,13 @@ export const validationInOneDayShema = Joi.object({
 });
 
 export const validationInOneMonthShema = Joi.object({
-  beginningOfTheMonth: Joi.string().min(4).max(12).required().messages({
+  beginningOfTheMonth: Joi.string().min(4).max(12).messages({
     'string.base': 'BeginningOfTheMonth must be a string!',
     'string.min': 'Minimum number of characters in a beginningOfTheMonth is 8!',
     'string.max':
       'The maximum number of characters in a beginningOfTheMonth is 12!',
   }),
-  endOfTheMonth: Joi.string().min(4).max(12).required().messages({
+  endOfTheMonth: Joi.string().min(4).max(12).messages({
     'string.base': 'EndOfTheMonth must be a string!',
     'string.min': 'Minimum number of characters in a endOfTheMonth is 8!',
     'string.max': 'The maximum number of characters in a endOfTheMonth is 12!',

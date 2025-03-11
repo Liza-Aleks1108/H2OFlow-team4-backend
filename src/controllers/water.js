@@ -37,7 +37,8 @@ export const patchWoterUpdatetController = async (req, res, next) => {
 };
 
 export const inOneDayWaterController = async (req, res) => {
-  const date = req.body.day;
+  // const date = req.body.day;
+  const date = req.query.day;
   const oneDay = await searchByDate(date);
 
   if (oneDay.length === 0) {
@@ -51,8 +52,11 @@ export const inOneDayWaterController = async (req, res) => {
 };
 
 export const inOneMonthWaterController = async (req, res) => {
-  const beginning = req.body.beginningOfTheMonth;
-  const end = req.body.endOfTheMonth;
+  // const beginning = req.body.beginningOfTheMonth;
+  // const end = req.body.endOfTheMonth;
+
+  const beginning = req.query.beginningOfTheMonth;
+  const end = req.query.endOfTheMonth;
 
   const oneMonth = await searchForPeriod(beginning, end);
 
