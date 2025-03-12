@@ -12,7 +12,7 @@ import { upload } from '../middlewares/upload.js';
 const router = Router();
 
 router.patch(
-  '/update',
+  '/',
   authenticate,
   validateBody(validationUpdateUserSchema),
   upload.single('photo'),
