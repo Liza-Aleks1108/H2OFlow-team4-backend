@@ -11,7 +11,7 @@ import { validationUpdateUserSchema } from '../validation/authValidation.js';
 const router = Router();
 
 router.patch(
-  '/update',
+  '/',
   authenticate,
   validateBody(validationUpdateUserSchema),
   ctrlWrapper(updateUserController),
