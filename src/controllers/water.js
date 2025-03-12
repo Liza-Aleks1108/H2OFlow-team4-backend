@@ -6,6 +6,7 @@ import {
   searchForPeriod,
   updatedWoter,
 } from '../services/water.js';
+import dateConversion from '../utils/dateConversion.js';
 
 export const addingDrunkWaterController = async (req, res) => {
   const oneTimeWaterIntake = await addingDrunkWater(req);
@@ -56,8 +57,18 @@ export const inOneMonthWaterController = async (req, res) => {
   // const beginning = req.body.beginningOfTheMonth;
   // const end = req.body.endOfTheMonth;
   const userId = req.user._id;
-  const beginning = req.query.beginningOfTheMonth;
-  const end = req.query.endOfTheMonth;
+  const date = req.query.month;
+
+  if (date.length < 7 || date.length > 7) {
+    throw createHttpError(
+      404,
+      'Incorrect date! Date must match this format "2025-03".',
+    );
+  }
+
+  const period = dateConversion(date);
+  const beginning = period.beginningOfPeriod;
+  const end = period.endOfPeriod;
 
   const oneMonth = await searchForPeriod(beginning, end, userId);
 
