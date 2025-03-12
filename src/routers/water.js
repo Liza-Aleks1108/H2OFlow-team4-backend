@@ -35,7 +35,7 @@ router.patch(
 );
 
 router.get(
-  '/in-one-day',
+  '/day',
   validateBody(validationInOneDayShema),
   ctrlWrapper(inOneDayWaterController),
 );
@@ -45,7 +45,7 @@ router.get(
 // }
 
 router.get(
-  '/in-one-month',
+  '/month',
   validateBody(validationInOneMonthShema),
   ctrlWrapper(inOneMonthWaterController),
 );
