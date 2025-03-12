@@ -44,6 +44,14 @@ export const startServer = async () => {
   app.use('/uploads', express.static(UPLOAD_DIR));
   app.use('/api-docs', swaggerDocs());
 
+  app.use((req, res, next) => {
+    res.setHeader(
+      'Content-Security-Policy',
+      "script-src 'self' 'nonce-abc123'",
+    );
+    next();
+  });
+
   app.use(router);
 
   app.use('*', notFoundHandler);
