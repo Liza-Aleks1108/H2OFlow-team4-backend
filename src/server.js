@@ -27,9 +27,20 @@ export const startServer = async () => {
   app.use(cookieParser());
   // added 35 packages
   const corsOptions = {
-    origin: ['http://127.0.0.1:3000', 'https://h2-o-flow-team4.vercel.app'],
+    origin: [
+      'http://localhost:5173',
+      'http://127.0.0.1:3000',
+      'http://localhost:3000',
+      'https://h2-o-flow-team4.vercel.app',
+    ],
     credentials: true,
   };
+
+  // app.use(
+  //   cors({
+  //     origin: '*',
+  //   }),
+  // );
 
   app.use(cors(corsOptions));
   app.options('*', cors(corsOptions));

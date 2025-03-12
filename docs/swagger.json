@@ -11,6 +11,10 @@
   },
   "servers": [
     {
+      "url": "http://localhost:3000",
+      "description": "Local development server"
+    },
+    {
       "url": "https://h2oflow-team4-backend.onrender.com",
       "description": "Production server"
     }
@@ -408,7 +412,31 @@
         }
       }
     },
-    "/users/update": {
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get current user profile",
+        "operationId": "getUser",
+        "description": "Returns the profile data of the authenticated user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/getUser-200"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
       "patch": {
         "tags": [
           "Users"
@@ -492,32 +520,6 @@
             "$ref": "#/components/responses/404"
           },
           "500": {
-            "$ref": "#/components/responses/404"
-          }
-        }
-      }
-    },
-    "/users": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Get current user profile",
-        "operationId": "getUser",
-        "description": "Returns the profile data of the authenticated user",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/getUser-200"
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          },
-          "404": {
             "$ref": "#/components/responses/404"
           }
         }
@@ -765,7 +767,7 @@
         }
       }
     },
-    "/water/in-one-day": {
+    "/water/day": {
       "get": {
         "tags": [
           "Water"
@@ -807,7 +809,7 @@
         }
       }
     },
-    "/water/in-one-month": {
+    "/water/month": {
       "get": {
         "tags": [
           "Water"
@@ -822,23 +824,13 @@
         ],
         "parameters": [
           {
-            "name": "beginningOfTheMonth",
+            "name": "month",
             "in": "query",
-            "description": "Start date of the period",
+            "description": "Month period",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "2025-03-01"
-            }
-          },
-          {
-            "name": "endOfTheMonth",
-            "in": "query",
-            "description": "End date of the period",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "2025-03-31"
+              "example": "2025-03"
             }
           }
         ],
@@ -1113,25 +1105,6 @@
           }
         }
       },
-      "updateUser-200": {
-        "description": "User successfully updated",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "User successfully updated!"
-                },
-                "user": {
-                  "$ref": "#/components/schemas/user"
-                }
-              }
-            }
-          }
-        }
-      },
       "getUser-200": {
         "description": "User successfully retrieved",
         "content": {
@@ -1142,6 +1115,25 @@
                 "message": {
                   "type": "string",
                   "example": "User successfully found!"
+                },
+                "user": {
+                  "$ref": "#/components/schemas/user"
+                }
+              }
+            }
+          }
+        }
+      },
+      "updateUser-200": {
+        "description": "User successfully updated",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "User successfully updated!"
                 },
                 "user": {
                   "$ref": "#/components/schemas/user"
