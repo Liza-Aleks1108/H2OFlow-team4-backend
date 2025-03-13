@@ -107,7 +107,7 @@ export const refreshUserSessionController = async (req, res) => {
 
 export const updateUserController = async (req, res, next) => {
   try {
-    const { _id: userId } = req.user;
+    const { userId } = req.user;
     const photo = req.file;
 
     let photoUrl;
