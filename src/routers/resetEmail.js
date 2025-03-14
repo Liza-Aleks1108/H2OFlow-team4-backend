@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import multer from 'multer';
 import {
   requestResetEmailController,
   resetPasswordController,
@@ -18,6 +19,6 @@ router.post(
 
 router.get('/reset-password', resetPasswordPageController);
 
-router.post('/reset-password', resetPasswordController);
+router.post('/reset-password', multer().none(), resetPasswordController);
 
 export default router;
