@@ -188,7 +188,7 @@ export const resetPasswordController = async (req, res, next) => {
     await user.save();
 
     res.status(200).send('Password reset successfully');
-  } catch (error) {
+  } catch {
     return next(createHttpError(400, 'Invalid or expired token'));
   }
 };
@@ -201,7 +201,7 @@ export const resetPasswordPageController = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, getEnvVar('JWT_SECRET'));
+    jwt.verify(token, getEnvVar('JWT_SECRET'));
 
     res.status(200).send(`
       <html>
@@ -216,7 +216,7 @@ export const resetPasswordPageController = (req, res, next) => {
         </body>
       </html>
     `);
-  } catch (error) {
+  } catch {
     return next(createHttpError(400, 'Invalid or expired token'));
   }
 };
