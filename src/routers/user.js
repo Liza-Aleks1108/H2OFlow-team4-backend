@@ -18,6 +18,7 @@ router.patch(
   validateBody(validationUpdateUserSchema),
   ctrlWrapper(updateUserController),
 );
+// обновление аватара
 router.patch(
   '/avatar',
   authenticate,
