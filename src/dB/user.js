@@ -15,11 +15,7 @@ export const userSchema = new mongoose.Schema(
     weight: { type: Number, default: 0 },
     dailySportTime: { type: Number, default: 0 },
     dailyNorm: { type: Number, default: 1500, min: 500, max: 15000 },
-    avatarUrl: {
-      type: String,
-      default:
-        'https://collection.cloudinary.com/dojuslnjs/d637fb90dcf69166ae1e1c04c01fb63e?',
-    },
+    avatarUrl: { type: String },
   },
   { timestamps: true, versionKey: false },
 );
