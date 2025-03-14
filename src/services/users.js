@@ -8,6 +8,5 @@ export const updateUser = async (id, payload) => {
   return await UserCollection.findByIdAndUpdate(id, payload, {
     new: true,
     runValidators: true,
-    includeResultMetadata: true,
   });
 };
