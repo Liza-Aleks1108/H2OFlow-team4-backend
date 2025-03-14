@@ -6,7 +6,7 @@ import createHttpError from 'http-errors';
 import { getEnvVar } from './getEnvVar.js';
 
 const PATH_JSON = path.join(process.cwd(), 'google-oauth.json');
-console.log('OAuth JSON Path:', PATH_JSON);
+
 const oauthConfig = JSON.parse(await readFile(PATH_JSON));
 
 const googleOAuthClient = new OAuth2Client({
