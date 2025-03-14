@@ -177,7 +177,8 @@ export const updateUserAvatarController = async (req, res, next) => {
     }
     return res.status(200).json({
       message: 'User successfully updated!',
-      user: updatedUser,
+      avatarUrl: photoUrl,
+      // user: updatedUser,
     });
   } catch (error) {
     next(error);
