@@ -44,7 +44,12 @@ export const inOneDayWaterController = async (req, res) => {
   const oneDay = await searchByDate(date, userId);
 
   if (oneDay.length === 0) {
-    throw createHttpError(404, 'There is no data for this day');
+    res.json({
+      status: 200,
+      message: 'There is no data for this day!',
+      oneDay,
+    });
+    return;
   }
 
   res.json({
@@ -73,7 +78,11 @@ export const inOneMonthWaterController = async (req, res) => {
   const oneMonth = await searchForPeriod(beginning, end, userId);
 
   if (oneMonth.length === 0) {
-    throw createHttpError(404, 'There is no data for this day');
+    res.json({
+      status: 200,
+      message: 'There is no data for this period!',
+      oneMonth,
+    });
   }
 
   res.json({
