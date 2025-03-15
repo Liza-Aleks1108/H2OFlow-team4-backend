@@ -224,19 +224,21 @@ export const resetPasswordPageController = (req, res, next) => {
   try {
     jwt.verify(token, getEnvVar('JWT_SECRET'));
 
-    res.status(200).send(`
-      <html>
-        <body>
-          <h1>Reset your password</h1>
-          <form action="/auth/reset-password" method="POST">
-            <input type="hidden" name="token" value="${token}" />
-            <label for="password">New Password:</label>
-            <input type="password" id="password" name="password" required />
-            <button type="submit">Reset Password</button>
-          </form>
-        </body>
-      </html>
-    `);
+    res.status(200).json({ status: 200, message: 'Form change password' });
+    //
+    // send(`
+    //   <html>
+    //     <body>
+    //       <h1>Reset your password</h1>
+    //       <form action="/auth/reset-password" method="POST">
+    //         <input type="hidden" name="token" value="${token}" />
+    //         <label for="password">New Password:</label>
+    //         <input type="password" id="password" name="password" required />
+    //         <button type="submit">Reset Password</button>
+    //       </form>
+    //     </body>
+    //   </html>
+    // `);
   } catch {
     return next(createHttpError(400, 'Invalid or expired token'));
   }
