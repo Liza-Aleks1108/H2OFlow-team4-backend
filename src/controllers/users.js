@@ -121,37 +121,7 @@ export const updateUserController = async (req, res, next) => {
     next(error);
   }
 };
-// export const updateUserController = async (req, res, next) => {
-//   try {
-//     const { _id: userId } = req.user;
-//     const photo = req.file;
 
-//     let photoUrl;
-
-//     if (photo) {
-//       if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
-//         photoUrl = await saveFileToCloudinary(photo);
-//       } else {
-//         photoUrl = await saveFileToUploadDir(photo);
-//       }
-//     }
-
-//     const updatedUser = await updateUser(userId, {
-//       ...req.body,
-//       avatarUrl: photoUrl,
-//     });
-
-//     if (!updatedUser) {
-//       throw createHttpError(404, 'User not found');
-//     }
-//     return res.status(200).json({
-//       message: 'User successfully updated!',
-//       user: updatedUser,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 export const updateUserAvatarController = async (req, res, next) => {
   try {
     const { _id: userId } = req.user;
@@ -235,7 +205,10 @@ export const resetPasswordController = async (req, res, next) => {
     user.password = hashedPassword;
     await user.save();
 
-    res.status(200).send('Password reset successfully');
+    res.status(200).json({
+      status: 200,
+      message: 'Password reset successfully',
+    });
   } catch {
     return next(createHttpError(400, 'Invalid or expired token'));
   }
