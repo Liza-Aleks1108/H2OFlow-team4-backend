@@ -161,14 +161,10 @@ export const loginOrSignupWithGoogle = async (code) => {
       email: payload.email,
       name: getFullNameFromGoogleTokenPayload(payload),
       password,
-      role: 'parent',
     });
   }
 
-  const newSession = createSession(user._id);
-
-  return await SessionsCollection.create({
-    userId: user._id,
-    ...newSession,
-  });
+  const session = createSession(user._id);
+  await SessionsCollection.create(session);
+  return session;
 };
