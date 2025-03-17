@@ -111,6 +111,7 @@ export const refreshUserSessionController = async (req, res) => {
     },
   });
 };
+
 export const updateUserController = async (req, res, next) => {
   try {
     const { _id: userId } = req.user;
