@@ -24,6 +24,7 @@ export const startServer = async () => {
   );
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
+  // app.use(cors());
   // added 35 packages
   const corsOptions = {
     origin: [
@@ -33,7 +34,10 @@ export const startServer = async () => {
       'https://h2-o-flow-team4.vercel.app',
     ],
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 'PATCH', 'DELETE'
   };
+  app.use(cors(corsOptions));
 
   // app.use(
   //   cors({
