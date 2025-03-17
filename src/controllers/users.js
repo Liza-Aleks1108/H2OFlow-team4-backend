@@ -80,16 +80,16 @@ export const logoutUserController = async (req, res) => {
 
 const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
-    httpOnly: true,
+    httpOnly: false,
     expires: new Date(Date.now() + ONE_DAY),
   });
 
   res.cookie('sessionId', session._id.toString(), {
-    httpOnly: true,
+    httpOnly: false,
     expires: new Date(Date.now() + ONE_DAY),
   });
   res.cookie('accessToken', session.accessToken, {
-    httpOnly: true,
+    httpOnly: false,
     expires: new Date(Date.now() + ONE_DAY),
     path: '/',
   });
