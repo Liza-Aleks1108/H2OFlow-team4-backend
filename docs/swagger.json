@@ -453,15 +453,14 @@
           "description": "User profile update data",
           "required": true,
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
                   "name": {
                     "description": "User name",
                     "type": "string",
-                    "example": "Alex Jonson",
-                    "default": "User"
+                    "example": "Alex Jonson"
                   },
                   "email": {
                     "description": "User email",
@@ -475,31 +474,22 @@
                       "woman",
                       "man"
                     ],
-                    "example": "man",
-                    "default": "woman"
+                    "example": "man"
                   },
                   "weight": {
                     "description": "User weight in kilograms",
                     "type": "number",
-                    "example": 67,
-                    "default": 0
+                    "example": 67
                   },
                   "dailySportTime": {
                     "description": "User sport time in hours per day",
                     "type": "number",
-                    "example": 8,
-                    "default": 0
+                    "example": 8
                   },
                   "dailyNorm": {
                     "description": "Daily water intake in milliliters",
                     "type": "number",
-                    "example": 1700,
-                    "default": 1500
-                  },
-                  "photo": {
-                    "description": "Link to contact's photo",
-                    "type": "string",
-                    "format": "binary"
+                    "example": 1700
                   }
                 }
               }
@@ -525,6 +515,74 @@
         }
       }
     },
+    "/users/avatar": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update user avatar",
+        "operationId": "updateUserAvatar",
+        "description": "Allows authenticated users to update their avatar for profile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "User avatar update data",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "photo": {
+                    "description": "Link to contact's photo",
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User successfully updated!"
+                    },
+                    "avatarUrl": {
+                      "description": "URL to the user profile photo",
+                      "type": "string",
+                      "example": "https://res.cloudinary.com/ddtrmtbl8/image/upload/v1740747328/qbclx8i3i9zchrvi1git.jpg"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
     "/users/count": {
       "get": {
         "tags": [
@@ -533,11 +591,7 @@
         "summary": "Get total number of users",
         "operationId": "getUsersCount",
         "description": "Returns the total number of registered users",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [],
         "responses": {
           "200": {
             "description": "Successfully retrieved the total number of users",
@@ -1342,7 +1396,7 @@
             "example": "14:30",
             "description": "Time of intake (HH:mm)"
           },
-          "amount": {
+          "volume": {
             "type": "number",
             "example": 1500
           },

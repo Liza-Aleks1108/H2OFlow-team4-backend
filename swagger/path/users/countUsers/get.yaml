@@ -3,8 +3,7 @@ tags:
 summary: Get total number of users
 operationId: getUsersCount
 description: 'Returns the total number of registered users'
-security:
-  - bearerAuth: []
+security: []
 
 responses:
   '200':
