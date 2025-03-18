@@ -13,7 +13,7 @@ properties:
     type: string
     example: '14:30'
     description: 'Time of intake (HH:mm)'
-  amount:
+  volume:
     type: number
     example: 1500
   createdAt:

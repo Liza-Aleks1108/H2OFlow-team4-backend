@@ -52,6 +52,9 @@ paths:
       $ref: ../swagger/path/users/getUser/get.yaml
     patch:
       $ref: ../swagger/path/users/updateUser/patch.yaml
+  /users/avatar:
+    patch:
+      $ref: ../swagger/path/users/updateUser/patchAvatar.yaml
   /users/count:
     get:
       $ref: ../swagger/path/users/countUsers/get.yaml

@@ -35,7 +35,7 @@ export const startServer = async () => {
     ],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 'PATCH', 'DELETE'
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH', 'DELETE'], //
   };
   app.use(cors(corsOptions));
 

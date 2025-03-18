@@ -1,0 +1,46 @@
+tags:
+  - Users
+summary: Update user avatar
+operationId: updateUserAvatar
+description: 'Allows authenticated users to update their avatar for profile'
+security:
+  - bearerAuth: []
+
+requestBody:
+  description: 'User avatar update data'
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        properties:
+          photo:
+            description: "Link to contact's photo"
+            type: string
+            format: binary
+
+responses:
+  '200':
+    description: 'User successfully updated'
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: 'User successfully updated!'
+            avatarUrl:
+              description: 'URL to the user profile photo'
+              type: string
+              example: 'https://res.cloudinary.com/ddtrmtbl8/image/upload/v1740747328/qbclx8i3i9zchrvi1git.jpg'
+  '400':
+    $ref: '../../../components/responses/400.yaml'
+
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+
+  '404':
+    $ref: '../../../components/responses/404.yaml'
+  '500':
+    $ref: '../../../components/responses/404.yaml'
