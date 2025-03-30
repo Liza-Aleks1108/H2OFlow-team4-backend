@@ -1,16 +1,18 @@
 import {
-  login,
-  loginOrSignupWithGoogle,
+  // login,
+  loginUser,
+  // loginOrSignupWithGoogle,
   logoutUser,
-  refreshUsersSession,
+  // refreshUsersSession,
   registerUser,
   requestResetToken,
+  refreshSession,
 } from '../services/auth.js';
 
 import bcrypt from 'bcryptjs';
-import createHttpError from 'http-errors';
+import createHttpError, { HttpError } from 'http-errors';
 import jwt from 'jsonwebtoken';
-import { ONE_DAY } from '../constants/index.js';
+// import { ONE_DAY } from '../constants/index.js';
 import { UserCollection } from '../dB/user.js';
 import { updateUser } from '../services/users.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
@@ -42,27 +44,42 @@ export const registerUserController = async (req, res) => {
   });
 };
 
-// логин пользователя
-export const loginController = async (req, res) => {
-  const session = await login(req.body);
-  res.cookie('refreshToken', session.refreshToken, {
-    httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
-    path: '/',
-  });
-  res.cookie('sessionId', session._id, {
-    httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
-    path: '/',
-  });
+// // логин пользователя
+// export const loginController = async (req, res) => {
+//   const session = await login(req.body);
+//   res.cookie('refreshToken', session.refreshToken, {
+//     httpOnly: true,
+//     expires: new Date(Date.now() + ONE_DAY),
+//     path: '/',
+//   });
+//   res.cookie('sessionId', session._id, {
+//     httpOnly: true,
+//     expires: new Date(Date.now() + ONE_DAY),
+//     path: '/',
+//   });
 
-  res.json({
-    status: 200,
-    message: 'Successfully logged in an user!',
-    data: {
-      accessToken: session.accessToken,
-    },
-  });
+//   res.json({
+//     status: 200,
+//     message: 'Successfully logged in an user!',
+//     data: {
+//       accessToken: session.accessToken,
+//     },
+//   });
+// };
+export const loginController = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const { user, token, refreshToken } = await loginUser(email, password);
+
+    res.json({
+      user,
+      token,
+      refreshToken,
+      message: `Welcome back, ${user.name} to the AquaTrack!`,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const logoutUserController = async (req, res) => {
@@ -78,38 +95,53 @@ export const logoutUserController = async (req, res) => {
   });
 };
 
-const setupSession = (res, session) => {
-  res.cookie('refreshToken', session.refreshToken, {
-    httpOnly: false,
-    expires: new Date(Date.now() + ONE_DAY),
-  });
+// const setupSession = (res, session) => {
+//   res.cookie('refreshToken', session.refreshToken, {
+//     httpOnly: false,
+//     expires: new Date(Date.now() + ONE_DAY),
+//   });
 
-  res.cookie('sessionId', session._id.toString(), {
-    httpOnly: false,
-    expires: new Date(Date.now() + ONE_DAY),
-  });
-  res.cookie('accessToken', session.accessToken, {
-    httpOnly: false,
-    expires: new Date(Date.now() + ONE_DAY),
-    path: '/',
-  });
-};
+//   res.cookie('sessionId', session._id.toString(), {
+//     httpOnly: false,
+//     expires: new Date(Date.now() + ONE_DAY),
+//   });
+//   res.cookie('accessToken', session.accessToken, {
+//     httpOnly: false,
+//     expires: new Date(Date.now() + ONE_DAY),
+//     path: '/',
+//   });
+// };
 
-export const refreshUserSessionController = async (req, res) => {
-  const session = await refreshUsersSession({
-    sessionId: req.cookies.sessionId,
-    refreshToken: req.cookies.refreshToken,
-  });
+// export const refreshUserSessionController = async (req, res) => {
+//   const session = await refreshUsersSession({
+//     sessionId: req.cookies.sessionId,
+//     refreshToken: req.cookies.refreshToken,
+//   });
 
-  setupSession(res, session);
+//   setupSession(res, session);
 
-  res.json({
-    status: 200,
-    message: 'Successfully refreshed a session!',
-    data: {
-      accessToken: session.accessToken,
-    },
-  });
+//   res.json({
+//     status: 200,
+//     message: 'Successfully refreshed a session!',
+//     data: {
+//       accessToken: session.accessToken,
+//     },
+//   });
+// };
+export const refreshUserSessionController = async (req, res, next) => {
+  try {
+    const { refreshToken: oldRefreshToken } = req.body;
+
+    if (!oldRefreshToken) {
+      return next(HttpError(400, 'Refresh token is required'));
+    }
+
+    const { token, refreshToken } = await refreshSession(oldRefreshToken);
+
+    res.json({ token, refreshToken });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const updateUserController = async (req, res, next) => {
@@ -265,15 +297,15 @@ export const getGoogleOAuthUrlController = async (req, res) => {
   });
 };
 
-export const loginWithGoogleController = async (req, res) => {
-  const session = await loginOrSignupWithGoogle(req.body.code);
-  setupSession(res, session);
+// export const loginWithGoogleController = async (req, res) => {
+//   const session = await loginOrSignupWithGoogle(req.body.code);
+//   setupSession(res, session);
 
-  res.json({
-    status: 200,
-    message: 'Successfully logged in via Google OAuth!',
-    data: {
-      accessToken: session.accessToken,
-    },
-  });
-};
+//   res.json({
+//     status: 200,
+//     message: 'Successfully logged in via Google OAuth!',
+//     data: {
+//       accessToken: session.accessToken,
+//     },
+//   });
+// };

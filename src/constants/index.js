@@ -2,7 +2,7 @@
 
 import path from 'node:path';
 
-export const FIFTEEN_MINUTES = 60 * 60 * 1000;
+export const FIFTEEN_MINUTES = 60 * 1000;
 export const ONE_DAY = 24 * 60 * 60 * 1000;
 
 // у файлі src/constants/index.js константу SWAGGER_PATH :
