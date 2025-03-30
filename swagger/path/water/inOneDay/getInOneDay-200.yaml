@@ -1,0 +1,13 @@
+description: 'Successfully retrieved water consumption data for the day'
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        oneDay:
+          type: array
+          items:
+            $ref: '../../../components/schemas/waterPeriod.yaml'

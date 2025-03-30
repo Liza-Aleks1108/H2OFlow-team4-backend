@@ -3,26 +3,44 @@ import bcrypt from 'bcrypt';
 import handlebars from 'handlebars';
 import createHttpError, { HttpError } from 'http-errors';
 import jwt from 'jsonwebtoken';
-import { ObjectId } from 'mongodb';
+// import { ObjectId } from 'mongodb';
 import fs from 'node:fs/promises';
 import path from 'path';
-import { TEMPLATES_DIR } from '../constants/index.js';
+import { FIFTEEN_MINUTES, ONE_DAY, TEMPLATES_DIR } from '../constants/index.js';
 // import { FIFTEEN_MINUTES, ONE_DAY, TEMPLATES_DIR } from '../constants/index.js';
 import { SessionsCollection } from '../dB/sessionsSchema.js';
 import { UserCollection } from '../dB/user.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
+// import {
+//   getFullNameFromGoogleTokenPayload,
+//   validateCode,
+// } from '../utils/googleOAuth2.js';
 import { sendEmail } from '../utils/sendMail.js';
 import 'dotenv/config';
+import { randomBytes } from 'node:crypto';
 
 export const registerUser = async (payload) => {
-  const user = await UserCollection.findOne({ email: payload.email });
-  if (user) throw createHttpError(409, 'Email in use');
+  const existingUser = await UserCollection.findOne({ email: payload.email });
+  if (existingUser) throw createHttpError(409, 'Email in use');
 
   const encryptedPassword = await bcrypt.hash(payload.password, 10);
-  return await UserCollection.create({
+  const newUser = await UserCollection.create({
     ...payload,
     password: encryptedPassword,
   });
+
+  const accessToken = randomBytes(30).toString('base64');
+  const refreshToken = randomBytes(30).toString('base64');
+
+  await SessionsCollection.create({
+    userId: newUser._id,
+    accessToken,
+    refreshToken,
+    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+    refreshTokenValidUntil: new Date(Date.now() + ONE_DAY),
+  });
+
+  return { user: newUser, accessToken };
 };
 
 const { SECRET_KEY, REFRESH_SECRET_KEY } = process.env;
@@ -53,6 +71,21 @@ export const loginUser = async (email, password) => {
 
   return { user, token, refreshToken };
 };
+
+// export const login = async (payload) => {
+//   const user = await UserCollection.findOne({ email: payload.email });
+
+//   if (!user) {
+//     throw createHttpError(404, 'User not found');
+//   }
+//   const isEqual = await bcrypt.compare(payload.password, user.password);
+//   if (!isEqual) {
+//     throw createHttpError(401, 'Unauthorized');
+//   }
+//   await SessionsCollection.deleteOne({ userId: user._id });
+
+// return { user, token, refreshToken };
+// };
 
 // export const login = async (payload) => {
 //   const user = await UserCollection.findOne({
@@ -100,6 +133,12 @@ export const logoutUser = async (sessionId) => {
 //   if (!sessionId || !refreshToken) {
 //     throw createHttpError(401, 'No active session found');
 //   }
+
+// export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
+//   const session = await SessionsCollection.findOne({
+//     _id: new ObjectId(sessionId),
+//     refreshToken,
+//   });
 
 //   let session;
 //   try {
@@ -159,30 +198,34 @@ export const logoutUser = async (sessionId) => {
 // };
 
 export const refreshSession = async (oldRefreshToken) => {
-  try {
-    jwt.verify(oldRefreshToken, REFRESH_SECRET_KEY);
-    const { id } = jwt.decode(oldRefreshToken);
-
-    const user = await UserCollection.findById(id);
-    if (!user) {
-      throw HttpError(404, 'User not found');
-    }
-
-    const payload = { id: user._id };
-    const newToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '1d' });
-    const newRefreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
-      expiresIn: '30d',
-    });
-
-    await UserCollection.findByIdAndUpdate(user._id, {
-      token: newToken,
-      refreshToken: newRefreshToken,
-    });
-
-    return { token: newToken, refreshToken: newRefreshToken };
-  } catch (error) {
-    throw error;
+  if (!SECRET_KEY || !REFRESH_SECRET_KEY) {
+    throw new Error('JWT secret keys are missing');
   }
+
+  jwt.verify(oldRefreshToken, REFRESH_SECRET_KEY);
+
+  const decoded = jwt.decode(oldRefreshToken);
+  if (!decoded || !decoded.id) {
+    throw HttpError(401, 'Invalid refresh token');
+  }
+
+  const user = await UserCollection.findById(decoded.id);
+  if (!user) {
+    throw HttpError(404, 'User not found');
+  }
+
+  const payload = { id: user._id };
+  const newToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '1d' });
+  const newRefreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
+    expiresIn: '30d',
+  });
+
+  await UserCollection.findByIdAndUpdate(user._id, {
+    token: newToken,
+    refreshToken: newRefreshToken,
+  });
+
+  return { token: newToken, refreshToken: newRefreshToken };
 };
 
 export const requestResetToken = async (email) => {
@@ -223,3 +266,23 @@ export const requestResetToken = async (email) => {
     html,
   });
 };
+
+// export const loginOrSignupWithGoogle = async (code) => {
+//   const loginTicket = await validateCode(code);
+//   const payload = loginTicket.getPayload();
+//   if (!payload) throw createHttpError(401);
+
+//   let user = await UserCollection.findOne({ email: payload.email });
+//   if (!user) {
+//     const password = await bcrypt.hash(randomBytes(10), 10);
+//     user = await UserCollection.create({
+//       email: payload.email,
+//       name: getFullNameFromGoogleTokenPayload(payload),
+//       password,
+//     });
+//   }
+
+//   const session = createSession(user._id);
+//   await SessionsCollection.create(session);
+//   return session;
+// };

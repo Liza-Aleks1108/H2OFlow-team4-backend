@@ -1,0 +1,17 @@
+tags:
+  - Users
+summary: Get current user profile
+operationId: getUser
+description: 'Returns the profile data of the authenticated user'
+security:
+  - bearerAuth: []
+
+responses:
+  '200':
+    $ref: getUser-200.yaml
+
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+
+  '404':
+    $ref: '../../../components/responses/404.yaml'

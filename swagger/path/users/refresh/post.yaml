@@ -1,0 +1,12 @@
+tags:
+  - Users
+summary: Refresh user session
+operationId: refreshUserSession
+description: 'Refresh access token using refresh token from cookies'
+security:
+  - bearerAuth: []
+responses:
+  '200':
+    $ref: refresh-200.yaml
+  '401':
+    $ref: '../../../components/responses/401.yaml'

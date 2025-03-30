@@ -6,6 +6,7 @@ import {
   searchForPeriod,
   updatedWoter,
 } from '../services/water.js';
+import dateConversion from '../utils/dateConversion.js';
 
 export const addingDrunkWaterController = async (req, res) => {
   const oneTimeWaterIntake = await addingDrunkWater(req);
@@ -17,10 +18,10 @@ export const addingDrunkWaterController = async (req, res) => {
 };
 
 export const patchWoterUpdatetController = async (req, res, next) => {
-  const { woterId } = req.params;
+  const { waterId } = req.params;
   const { _id: userId } = req.user;
 
-  const result = await updatedWoter(woterId, userId, {
+  const result = await updatedWoter(waterId, userId, {
     ...req.body,
   });
 
@@ -37,11 +38,18 @@ export const patchWoterUpdatetController = async (req, res, next) => {
 };
 
 export const inOneDayWaterController = async (req, res) => {
-  const date = req.body.day;
-  const oneDay = await searchByDate(date);
+  // const date = req.body.day;
+  const userId = req.user._id;
+  const date = req.query.day;
+  const oneDay = await searchByDate(date, userId);
 
   if (oneDay.length === 0) {
-    throw createHttpError(404, 'There is no data for this day');
+    res.json({
+      status: 200,
+      message: 'There is no data for this day!',
+      oneDay,
+    });
+    return;
   }
 
   res.json({
@@ -51,13 +59,30 @@ export const inOneDayWaterController = async (req, res) => {
 };
 
 export const inOneMonthWaterController = async (req, res) => {
-  const beginning = req.body.beginningOfTheMonth;
-  const end = req.body.endOfTheMonth;
+  // const beginning = req.body.beginningOfTheMonth;
+  // const end = req.body.endOfTheMonth;
+  const userId = req.user._id;
+  const date = req.query.month;
 
-  const oneMonth = await searchForPeriod(beginning, end);
+  if (date.length < 7 || date.length > 7) {
+    throw createHttpError(
+      404,
+      'Incorrect date! Date must match this format "2025-03".',
+    );
+  }
+
+  const period = dateConversion(date);
+  const beginning = period.beginningOfPeriod;
+  const end = period.endOfPeriod;
+
+  const oneMonth = await searchForPeriod(beginning, end, userId);
 
   if (oneMonth.length === 0) {
-    throw createHttpError(404, 'There is no data for this day');
+    res.json({
+      status: 200,
+      message: 'There is no data for this period!',
+      oneMonth,
+    });
   }
 
   res.json({
@@ -67,8 +92,9 @@ export const inOneMonthWaterController = async (req, res) => {
 };
 
 export const deleteWotertController = async (req, res, next) => {
-  const { woterId } = req.params;
-  const record = await deleteWoterRecord(woterId, req);
+  const { waterId } = req.params;
+  console.log(req);
+  const record = await deleteWoterRecord(waterId, req);
 
   if (!record) {
     next(createHttpError(404, 'No such entry found!'));

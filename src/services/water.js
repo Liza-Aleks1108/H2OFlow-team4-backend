@@ -8,11 +8,11 @@ export const addingDrunkWater = async (payload) => {
   return waterIntake;
 };
 
-export const updatedWoter = async (woterId, userId, payload, options = {}) => {
+export const updatedWoter = async (waterId, userId, payload, options = {}) => {
   const updatedWoter = await WaterCollection.findOneAndUpdate(
     {
       userId,
-      _id: woterId,
+      _id: waterId,
     },
     payload,
     {
@@ -30,14 +30,14 @@ export const updatedWoter = async (woterId, userId, payload, options = {}) => {
   };
 };
 
-export const searchByDate = async (date) => {
-  const oneDay = await WaterCollection.find({ day: { $eq: date } });
+export const searchByDate = async (date, userId) => {
+  const oneDay = await WaterCollection.find({ userId, day: { $eq: date } });
 
   return oneDay;
 };
 
-export const searchForPeriod = async (beginning, end) => {
-  const oneDay = await WaterCollection.find()
+export const searchForPeriod = async (beginning, end, userId) => {
+  const oneDay = await WaterCollection.find({ userId })
     .where('day')
     .gte(beginning)
     .lte(end);
@@ -45,10 +45,10 @@ export const searchForPeriod = async (beginning, end) => {
   return oneDay;
 };
 
-export const deleteWoterRecord = async (woterId, req) => {
+export const deleteWoterRecord = async (waterId, req) => {
   const record = await WaterCollection.findOneAndDelete({
     userId: req.user._id,
-    _id: woterId,
+    _id: waterId,
   });
   return record;
 };
