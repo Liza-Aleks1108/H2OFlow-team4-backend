@@ -7,6 +7,7 @@ import {
   registerUser,
   requestResetToken,
   refreshSession,
+  loginOrSignupWithGoogle,
 } from '../services/auth.js';
 
 import bcrypt from 'bcryptjs';
@@ -19,6 +20,7 @@ import { getEnvVar } from '../utils/getEnvVar.js';
 import { generateAuthUrl } from '../utils/googleOAuth2.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
+import { ONE_DAY } from '../constants/index.js';
 
 export const getUsersCountController = async (req, res, next) => {
   try {
@@ -95,22 +97,22 @@ export const logoutUserController = async (req, res) => {
   });
 };
 
-// const setupSession = (res, session) => {
-//   res.cookie('refreshToken', session.refreshToken, {
-//     httpOnly: false,
-//     expires: new Date(Date.now() + ONE_DAY),
-//   });
+const setupSession = (res, session) => {
+  res.cookie('refreshToken', session.refreshToken, {
+    httpOnly: false,
+    expires: new Date(Date.now() + ONE_DAY),
+  });
 
-//   res.cookie('sessionId', session._id.toString(), {
-//     httpOnly: false,
-//     expires: new Date(Date.now() + ONE_DAY),
-//   });
-//   res.cookie('accessToken', session.accessToken, {
-//     httpOnly: false,
-//     expires: new Date(Date.now() + ONE_DAY),
-//     path: '/',
-//   });
-// };
+  res.cookie('sessionId', session._id.toString(), {
+    httpOnly: false,
+    expires: new Date(Date.now() + ONE_DAY),
+  });
+  res.cookie('accessToken', session.accessToken, {
+    httpOnly: false,
+    expires: new Date(Date.now() + ONE_DAY),
+    path: '/',
+  });
+};
 
 // export const refreshUserSessionController = async (req, res) => {
 //   const session = await refreshUsersSession({
@@ -297,15 +299,15 @@ export const getGoogleOAuthUrlController = async (req, res) => {
   });
 };
 
-// export const loginWithGoogleController = async (req, res) => {
-//   const session = await loginOrSignupWithGoogle(req.body.code);
-//   setupSession(res, session);
+export const loginWithGoogleController = async (req, res) => {
+  const session = await loginOrSignupWithGoogle(req.body.code);
+  setupSession(res, session);
 
-//   res.json({
-//     status: 200,
-//     message: 'Successfully logged in via Google OAuth!',
-//     data: {
-//       accessToken: session.accessToken,
-//     },
-//   });
-// };
+  res.json({
+    status: 200,
+    message: 'Successfully logged in via Google OAuth!',
+    data: {
+      accessToken: session.accessToken,
+    },
+  });
+};
