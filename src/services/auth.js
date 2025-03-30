@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 // import { randomBytes } from 'crypto';
 import handlebars from 'handlebars';
-import createHttpError, { HttpError } from 'http-errors';
+import createHttpError from 'http-errors';
 import jwt from 'jsonwebtoken';
 // import { ObjectId } from 'mongodb';
 import fs from 'node:fs/promises';
@@ -53,16 +53,16 @@ export const loginUser = async (email, password) => {
   const user = await UserCollection.findOne({ email });
 
   if (!user) {
-    throw HttpError(400, 'Email or password is wrong');
+    throw createHttpError(400, 'Email or password is wrong');
   }
 
   if (!user.isVerified) {
-    throw HttpError(400, 'Email is not verified');
+    throw createHttpError(400, 'Email is not verified');
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
-    throw HttpError(400, 'Email or password is wrong');
+    throw createHttpError(400, 'Email or password is wrong');
   }
 
   const payload = { id: user._id };
@@ -73,7 +73,7 @@ export const loginUser = async (email, password) => {
 
   await UserCollection.findByIdAndUpdate(user._id, { token, refreshToken });
 
-  return { user, token, refreshToken };
+  return { user: user.toObject(), token, refreshToken };
 };
 
 // export const login = async (payload) => {
@@ -210,12 +210,12 @@ export const refreshSession = async (oldRefreshToken) => {
 
   const decoded = jwt.decode(oldRefreshToken);
   if (!decoded || !decoded.id) {
-    throw HttpError(401, 'Invalid refresh token');
+    throw createHttpError(401, 'Invalid refresh token');
   }
 
   const user = await UserCollection.findById(decoded.id);
   if (!user) {
-    throw HttpError(404, 'User not found');
+    throw createHttpError(404, 'User not found');
   }
 
   const payload = { id: user._id };
